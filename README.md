@@ -1,5 +1,5 @@
 # jetson-ros-workspace
-description
+This repo is for the code that will be deployed to the jetson board to run on the robot. 
 
 ## Getting Started
 
