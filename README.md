@@ -5,7 +5,7 @@ This repo is for the code that will be deployed to the jetson board to run on th
 
 ### Requirements
 Use the links for installation guides. Versions are important.
-* **Only For Developers** - Ubuntu 18.04 (You can use [your pc](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview), a VM, or a cloud provider such as AWS)
+* **Only For Developers** - Ubuntu 18.04 (You can use [your pc](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview), a VM, or a cloud provider such as [AWS](https://github.com/UBCAgroBot/jetson-ros-workspace/blob/main/docs/aws_developer_env.md))
 * **Only For Jetson** - [Jetpack 4.6.1](https://developer.nvidia.com/embedded/jetpack) (Ubuntu is included in Jetpack)
 * [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) Desktop Version
 
