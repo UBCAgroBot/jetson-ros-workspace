@@ -15,6 +15,11 @@ Use the links for installation guides. Versions are important.
 ``` 
 git clone https://<your-access-token>@github.com/UBCAgroBot/jetson-ros-workspace.git
 ```
+* Open a terminal and navigate into the jetson-ros-workspace folder
+* Use the command below to build
+```
+catkin_make
+```
 
 ### Usage
 * Open a terminal window
