@@ -74,7 +74,7 @@ catkin_make
 ```
 cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src/<your_package>/src/scripts
 ```
-* Create the script with `touch`. Be sure the script name is unique and tells what the script does.
+* Create the script with `touch`. Be sure the script name is unique in the package and tells what the script does.
 ```
 touch <script_name>.py
 ```
@@ -93,6 +93,11 @@ catkin_install_python(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ```
-
+* Go to workspace folder and build.
+```
+cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace
+catkin_make
+```
 #### Publishing To A New Topic
-To be added
+* All topics need to be unique throughout the system. Be sure there is no other topic with the same name in any package.
+* Creating a publisher in your node script with `pub = rospy.Publisher('<topic_name>', String, queue_size=1)` declares the topic with `<topic_name>`.
