@@ -53,11 +53,24 @@ To be added
 #### Setting Up A New Package
 The plan is to set up one package per subteam and packages for interteam tasks (such as publishing sensor data). Please create a new package only if your team does not have one yet or you are working on a new task that is required by multiple teams.
 
-How to set up a package will be added.
+* Open a new terminal
+* Go into the src of the workspace
+```
+cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src
+```
+* Use catkin_create_pkg script to create a package with dependencies you need. The usual dependencies `std_msgs rospy roscpp` are given below. You can add other dependencies.
+```
+catkin_create_pkg <name_of_your_package> std_msgs rospy roscpp
+```
+Go back to workspace folder and rebuild.
+```
+cd ..
+catkin_make
+```
 
 #### Creating A New Node (Python)
 * Open a new terminal
-* Go into the scripts of the package you are working on
+* Go into the scripts of the package you are working on. (If there is no scripts folder in src, go into package src and use `mkdir scripts`)
 ```
 cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src/<your_package>/src/scripts
 ```
