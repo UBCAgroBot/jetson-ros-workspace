@@ -41,3 +41,45 @@ catkin_make
   rosrun package_name script_name.py
 ```
 For example, `rosrun navigation decision.py` currently publishes the integer `1` to topic `/state`
+
+## Contribution
+Please contribute to the project according to both GitHub and ROS contribution guidelines outlined below. ROS Contribution Guidelines are very important for your code to work on every computer.
+
+### GitHub Contribution Guidelines
+To be added
+
+### ROS Contribution Guidelines
+
+#### Setting Up A New Package
+The plan is to set up one package per subteam and packages for interteam tasks (such as publishing sensor data). Please create a new package only if your team does not have one yet or you are working on a new task that is required by multiple teams.
+
+How to set up a package will be added.
+
+#### Creating A New Node (Python)
+* Open a new terminal
+* Go into the scripts of the package you are working on
+```
+cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src/<your_package>/src/scripts
+```
+* Create the script with `touch`. Be sure the script name is unique and tells what the script does.
+```
+touch <script_name>.py
+```
+* Make the script executable
+```
+chmod +x <script_name>.py
+```
+* Open the CMakeList of the package you are working on using any text editor. `vim` for vim, `nano` for nano, `code` for VS Code, etc.
+```
+vim ../../CMakeLists.txt
+```
+* Add the following code to the file. According to ROS Tutorials, this is necessary for python script to install properly and use the correct interpreter.
+```
+catkin_install_python(PROGRAMS 
+  src/scripts/<script_name>.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+```
+
+#### Publishing To A New Topic
+To be added
