@@ -46,7 +46,25 @@ For example, `rosrun navigation decision.py` currently publishes the integer `1`
 Please contribute to the project according to both GitHub and ROS contribution guidelines outlined below. ROS Contribution Guidelines are very important for your code to work on every computer.
 
 ### GitHub Contribution Guidelines
-To be added
+Please create a new branch from the latest version of main branch for your contribution. Create one branch for each individual feature / fix. After you finish writing and testing your feature / fix, open a pull request to merge your branch with the main. Please write meaningful comments to your commits and pull requests.
+
+#### How to Branch
+```
+git checkout main`
+```
+
+```
+git pull
+```
+
+```
+git checkout -b <new_branch_name> main
+```
+
+#### How to open a pull request
+* Open the branch page in GitHub.
+* Use the `contribute` button to open a PR (pull request).
+* Your code is ready to be reviewed and merged. Great work!
 
 ### ROS Contribution Guidelines
 
