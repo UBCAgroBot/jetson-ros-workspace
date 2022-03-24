@@ -73,7 +73,7 @@ For `<subteam-initial>`, use `n` for navigation, `i` for image recognition, `e` 
 ### ROS Contribution Guidelines
 
 #### Setting Up A New Package
-The plan is to set up one package per subteam and packages for interteam tasks (such as publishing sensor data). Please create a new package only if your team does not have one yet or you are working on a new task that is required by multiple teams.
+Please create a new package only if it is agreed in an all-subteams meeting, so the file system does not get too complicated. Thank you.
 
 * Open a new terminal
 * Go into the src of the workspace
