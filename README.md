@@ -50,7 +50,7 @@ Please create a new branch from the latest version of main branch for your contr
 
 #### How to Branch
 ```
-git checkout main`
+git checkout main
 ```
 
 ```
@@ -60,6 +60,10 @@ git pull
 ```
 git checkout -b <new_branch_name> main
 ```
+#### Naming your branch: 
+Please name your branch as `<subteam-initial>/<your-name>/<short-description-of-feature-or-fix>`
+
+For `<subteam-initial>`, use `n` for navigation, `i` for image recognition, `e` for extermination, `c` for chassis.
 
 #### How to open a pull request
 * Open the branch page in GitHub.
