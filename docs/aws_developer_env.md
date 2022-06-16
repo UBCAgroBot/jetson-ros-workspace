@@ -44,7 +44,7 @@ cd jetson-ros-workspace
 ```
 
 ```
-. ~/catkin_ws/devel/setup.bash
+. devel/setup.bash
 ```
 ```
 roscore
@@ -54,7 +54,7 @@ roscore
 cd jetson-ros-workspace
 ```
 ```
-. ~/catkin_ws/devel/setup.bash
+. devel/setup.bash
 ```
 ```
 rosrun navigation [script_you_want_to_run.py]
