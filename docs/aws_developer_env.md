@@ -17,22 +17,16 @@ ssh -i [Address of .pem file] ubuntu@[Public IPv4 DNS]
 ```
 11. You are connected to the server. Congrats!
 
-## Download necessary libaries
+## Clone the repo to EC2 and Setup
 
-1. Follow [this page](http://wiki.ros.org/melodic/Installation/Ubuntu) for ROS melodic
-2. Choose "Desktop Install" option
-
-## Clone jetson-ros-workspace from GitHub to EC2
-
-1. [Create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) on GitHub
-2. Clone the repo using the command below
-``` 
-git clone https://<your-access-token>@github.com/UBCAgroBot/jetson-ros-workspace.git
+* Clone the repo with the command below. You will need to enter [a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) instead of your GitHub password.
 ```
-3. Open a terminal and navigate into the jetson-ros-workspace folder
-4. Use the command below to build
+git clone https://github.com/UBCAgroBot/jetson-ros-workspace.git
 ```
-catkin_make
+* Open a terminal and navigate into the jetson-ros-workspace folder
+* Use the command below to install ROS and to complete other steps.
+```
+. setup.sh
 ```
 
 ## Run
