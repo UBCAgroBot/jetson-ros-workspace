@@ -9,7 +9,10 @@ Use the links for installation guides. Versions are important.
 * **For Jetson** - [Jetpack 4.6.1](https://developer.nvidia.com/embedded/jetpack) (Ubuntu is included in Jetpack)
 
 ### Installation
-* Clone the repo. You will need to enter [a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) instead of your GitHub password.
+* Clone the repo with the command below. You will need to enter [a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) instead of your GitHub password.
+```
+git clone https://github.com/UBCAgroBot/jetson-ros-workspace.git
+```
 * Open a terminal and navigate into the jetson-ros-workspace folder
 * Use the command below to install ROS and to complete other steps.
 ```
