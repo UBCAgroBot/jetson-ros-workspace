@@ -1,72 +1,92 @@
 # jetson-ros-workspace
-This repo is for the code that will be deployed to the jetson board to run on the robot. 
+
+This repo is for the code that will be deployed to the jetson board to run on the robot.
 
 ## Getting Started
 
 ### Requirements
+
 Use the links for installation guides. Versions are important.
+
 * **For Developers** - Ubuntu 18.04 (You can use [your pc](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview), a VM, or a cloud provider such as [AWS](https://github.com/UBCAgroBot/jetson-ros-workspace/blob/main/docs/aws_developer_env.md))
 * **For Jetson** - [Jetpack 4.6.1](https://developer.nvidia.com/embedded/jetpack) (Ubuntu is included in Jetpack)
 
 ### Installation
+
 * Clone the repo with the command below. You will need to enter [a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) instead of your GitHub password.
+
+```bash
+git clone --recurse-submodules https://github.com/UBCAgroBot/jetson-ros-workspace.git
 ```
-git clone https://github.com/UBCAgroBot/jetson-ros-workspace.git
-```
+
 * Open a terminal and navigate into the jetson-ros-workspace folder
 * Use the command below to install ROS and to complete other steps.
-```
+
+```bash
 . setup.sh
 ```
+
 If you want to install ROS manually, you can follow [this page from ROS Wiki](https://wiki.ros.org/melodic/Installation/Ubuntu). Use `catkin_make` to build the project after installing ROS manually.
 
 ### Usage
+
 * Open a terminal window
 * Navigate to jetson-ros-workspace folder
 * Use the below command to start running roscore. You need roscore to run for any other ROS scripts to run.
-```
+
+```bash
   roscore
 ```
+
 **For scripts you are going to run:**
+
 * Open a new terminal window
 * Navigate to jetson-ros-workspace folder
 * Use the ` . devel/setup.bash ` command to start running ROS commands from the workspace
 * Use the command below to run the scipt
-```
+
+```bash
   rosrun package_name script_name.py
 ```
+
 For example, `rosrun navigation decision.py` currently publishes the integer `1` to topic `/state`
 
 **Note:** If the terminal cannot find something about ROS, try the command below.
-```
+
+```bash
 . devel/setup.bash
 ```
 
-
 ## Contribution
+
 Please contribute to the project according to both GitHub and ROS contribution guidelines outlined below. ROS Contribution Guidelines are very important for your code to work on every computer.
 
 ### GitHub Contribution Guidelines
+
 Please create a new branch from the latest version of main branch for your contribution. Create one branch for each individual feature / fix. After you finish writing and testing your feature / fix, open a pull request to merge your branch with the main. Please write meaningful comments to your commits and pull requests.
 
 #### How to Branch
-```
+
+```bash
 git checkout main
 ```
 
-```
+```bash
 git pull
 ```
 
-```
+```bash
 git checkout -b <new_branch_name> main
 ```
-#### Naming your branch: 
+
+#### Naming your branch
+
 Please name your branch as `<subteam-initial>/<your-name>/<short-description-of-feature-or-fix>`
 
 For `<subteam-initial>`, use `n` for navigation, `i` for image recognition, `e` for extermination, `c` for chassis.
 
 #### How to open a pull request
+
 * Open the branch page in GitHub.
 * Use the `contribute` button to open a PR (pull request).
 * Your code is ready to be reviewed and merged. Great work!
@@ -74,53 +94,73 @@ For `<subteam-initial>`, use `n` for navigation, `i` for image recognition, `e` 
 ### ROS Contribution Guidelines
 
 #### Setting Up A New Package
+
 Please create a new package only if it is agreed in an all-subteams meeting, so the file system does not get too complicated. Thank you.
 
 * Open a new terminal
 * Go into the src of the workspace
-```
+
+```bash
 cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src
 ```
+
 * Use catkin_create_pkg script to create a package with dependencies you need. The usual dependencies `std_msgs rospy roscpp` are given below. You can add other dependencies.
-```
+
+```bash
 catkin_create_pkg <name_of_your_package> std_msgs rospy roscpp
 ```
+
 Go back to workspace folder and rebuild.
-```
+
+```bash
 cd ..
 catkin_make
 ```
 
 #### Creating A New Node (Python)
+
 * Open a new terminal
 * Go into the scripts of the package you are working on. (If there is no scripts folder in src, go into package src and use `mkdir scripts`)
-```
+
+```bash
 cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace/src/<your_package>/src/scripts
 ```
+
 * Create the script with `touch`. Be sure the script name is unique in the package and tells what the script does.
-```
+
+```bash
 touch <script_name>.py
 ```
+
 * Make the script executable
-```
+
+```bash
 chmod +x <script_name>.py
 ```
+
 * Open the CMakeList of the package you are working on using any text editor. `vim` for vim, `nano` for nano, `code` for VS Code, etc.
-```
+
+```bash
 vim ../../CMakeLists.txt
 ```
+
 * Add the following code to the file. According to ROS Tutorials, this is necessary for python script to install properly and use the correct interpreter.
-```
+
+```bash
 catkin_install_python(PROGRAMS 
   src/scripts/<script_name>.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ```
+
 * Go to workspace folder and build.
-```
+
+```bash
 cd ~/<path_to_folder_workspace_is_in>/jetson_ros_workspace
 catkin_make
 ```
+
 #### Publishing To A New Topic
+
 * All topics need to be unique throughout the system. Be sure there is no other topic with the same name in any package.
 * Creating a publisher in your node script with `pub = rospy.Publisher('<topic_name>', String, queue_size=1)` declares the topic with `<topic_name>`.
