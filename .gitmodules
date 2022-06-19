@@ -1,0 +1,3 @@
+[submodule "Navigation"]
+	path = Navigation
+	url = git@github.com:UBCAgroBot/Navigation.git
