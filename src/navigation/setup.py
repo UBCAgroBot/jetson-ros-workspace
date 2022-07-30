@@ -20,8 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'mock_camera_talker = navigation.mock_camera_publisher:main',
-            'algorithm_listener = navigation.algorithm_subscriber:main',
+            'mock_camera_publisher = navigation.mock_camera_publisher:main',
+            'sin_motor_publisher = navigation.sin_motor_publisher:main',
+            'subscriber = navigation.subscriber:main',
         ]
     },
 )
