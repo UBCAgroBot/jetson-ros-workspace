@@ -1,27 +1,37 @@
+import time
 import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import String
 import math
+import serial
 
 class SinMotorPublisher(Node):
 
     def __init__(self):
         super().__init__('sin_motor_publisher')
         self.publisher_ = self.create_publisher(String, 'motor_topic', 10)
-        timer_period = 0.5  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.PERIOD = 0.5  # seconds
+        self.MAX_ANGLE = 45
+        self.STEP_SIZE = math.pi/10
+        self.timer = self.create_timer(self.PERIOD, self.timer_callback)
+        self.arduino = serial.Serial(port='/dev/ttyACM1', baudrate=115200, timeout=0.1)
         self.x = 0
 
     def timer_callback(self):
         msg = String()
         msg.data = f'{self.sin(self.x):.2f}'
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
-        self.x += math.pi/10
+        self.get_logger().info(f'{self.sin(self.x):.2f}')
+        self.x += self.STEP_SIZE
+
+        self.arduino.write(bytes(f'{self.sin(self.x):.2f}', 'utf-8'))
+        time.sleep(0.05)
+        data = self.arduino.readline()
+        print(data)
 
     def sin(self, x):
-        return 45 * math.sin(x)
+        return self.MAX_ANGLE * math.sin(x)
 
 
 def main(args=None):
