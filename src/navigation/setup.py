@@ -23,6 +23,7 @@ setup(
             'mock_camera_publisher = navigation.mock_camera_publisher:main',
             'sin_motor_publisher = navigation.sin_motor_publisher:main',
             'subscriber = navigation.subscriber:main',
+            'center_row_publisher = navigation.center_row_publisher:main'
         ]
     },
 )
