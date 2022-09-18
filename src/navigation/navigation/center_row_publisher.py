@@ -11,7 +11,7 @@ class CenterRowPublisher(AlgorithmPublisher):
 def main(args=None):
     rclpy.init(args=args)
 
-    center_row_publisher = CenterRowPublisher()
+    center_row_publisher = CenterRowPublisher(debug=True)
 
     rclpy.spin(center_row_publisher)
 

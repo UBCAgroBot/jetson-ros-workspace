@@ -1,24 +1,43 @@
+import glob
 import rclpy
 from rclpy.node import Node
-
-from std_msgs.msg import String
-
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+import numpy as np
+import sys
+import cv2 as cv
 
 class MockCameraPublisher(Node):
 
     def __init__(self):
         super().__init__('mock_camera_publisher')
-        self.publisher_ = self.create_publisher(String, 'camera_topic', 10)
+        self.publisher_ = self.create_publisher(Image, 'mock_image_stream', 10)
         timer_period = 0.5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.i = 0
+        self.br = CvBridge()
+
+        # we expect images/ to contain a bunch of images that we can use to mock a camera stream
+        filenames = glob.glob(f"src/navigation/images/*.png")
+        filenames.sort()
+        
+        print("Reading images")
+        self.images = [cv.imread(img) for img in filenames]
+        print("Read images")
+
+        # exit if no images are found
+        if len(self.images) == 0:
+            print("No images found in ../images/")
+            sys.exit(1)
+
+        # create a pointer to keep track of which image we are on
+        self.pointer = 0
 
     def timer_callback(self):
-        msg = String()
-        msg.data = 'Camera data: %d' % self.i
+        msg = Image()
+        msg.data = self.br.cv2_to_imgmsg(np.array(self.images[self.pointer]), "bgr8")
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
-        self.i += 1
+        self.get_logger().info(f'Publishing image {self.pointer}')
+        self.pointer += 1
 
 
 def main(args=None):
