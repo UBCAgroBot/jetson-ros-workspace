@@ -2,8 +2,8 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from rclpy.qos import qos_profile_sensor_data
-from cv_bridge import CvBridge
 import cv2 as cv
+from cv_bridge import CvBridge
 import sys
 sys.path.append(".")
 
@@ -30,9 +30,12 @@ class AlgorithmPublisher(Node):
             self.algorithm = get_algorithm(algorithm)
         except ValueError as err:
             sys.exit(err.args)
+        print(self.algorithm, self.topic)
 
     def listener_callback(self, data):
         current_frame = self.br.imgmsg_to_cv2(data)
+        cv.imshow(f'realsense footage', current_frame)
+        cv.waitKey(1)
         processed_image, intersection_point = self.algorithm.processFrame(current_frame, show=self.debug)
         msg = String()
         msg.data = str(intersection_point)
