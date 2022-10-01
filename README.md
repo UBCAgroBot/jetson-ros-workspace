@@ -1,14 +1,15 @@
 # ROS 2 jetson workspace
 
-This branch is for the code that will be deployed to the jetson board to run on the robot. It used ROS 2 Humble Hawksbill.
+This repo is for the code that will be deployed to the Jetson board. It is a ROS 2 foxy workspace.
+
 ## Getting Started
 
 ### Requirements
 
 **For Developers**:
 
-- [Ubuntu 22.04](https://releases.ubuntu.com/22.04/) (You can use [your laptop](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview), a VM, or a cloud provider such as [AWS](https://github.com/UBCAgroBot/jetson-ros-workspace/blob/main/docs/aws_developer_env.md))
-- [GitHub SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for you laptop/workspace
+- [Ubuntu 20.04](https://releases.ubuntu.com/20.04/) (You can use [your laptop](https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview), a VM, or a cloud provider such as [AWS](https://github.com/UBCAgroBot/jetson-ros-workspace/blob/main/docs/aws_developer_env.md))
+- [GitHub SSH [key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for your laptop/workspace
 
 ### Installation
 
@@ -19,9 +20,9 @@ git clone --recurse-submodules git@github.com:UBCAgroBot/jetson-ros-workspace.gi
 git checkout ros2-workspace
 ```
 
-To install `ros2`, follow [this page from the ROS 2 docs](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html).
+To install `ros2`, follow [this page from the ROS 2 docs](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html).
 
-Also, **make sure to complete** [Beginner CLI Tools](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools.html#) and [Beginner Client Libraries](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries.html) since they cover important fundamentals of ROS 2 and also guide you with setting up your environment and the installation of `colcon` and `rqt`.
+Also, **make sure to complete** [Beginner CLI Tools](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools.html) and [Beginner Client Libraries](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries.html) since they cover important fundamentals of ROS 2 and also guide you with setting up your environment and the installation of `colcon` and `rqt`.
 
 ### Troubleshooting
 
@@ -33,15 +34,15 @@ Also, **make sure to complete** [Beginner CLI Tools](https://docs.ros.org/en/hum
 
   - run `pip install setuptools==58.2.0` ([source](https://answers.ros.org/question/396439/setuptoolsdeprecationwarning-setuppy-install-is-deprecated-use-build-and-pip-and-other-standards-based-tools/))
 
-- If you see any import errors for the modules when using `PyCharm` or `VS Code`follow [this](https://answers.ros.org/question/382798/vscode-rospy-import-error/) to inform the location of the modules to your IDE.
+- If you see any import errors for the modules when using `PyCharm` or `VS Code` follow [this](https://answers.ros.org/question/382798/vscode-rospy-import-error/) to inform the location of the modules to your IDE.
 
 ## Contribution
 
-Please contribute to the project according to GitHub contribution guidelines outlined below.
+Please contribute to the project according to the GitHub contribution guidelines outlined below.
 
 ### GitHub Contribution Guidelines
 
-Please create a new branch from the latest version of main branch for your contribution. Create one branch for each individual feature / fix. After you finish writing and testing your feature / fix, open a pull request to merge your branch with the main. Please write meaningful comments to your commits and pull requests.
+Please create a new branch from the latest version of the main branch for your contribution. Create one branch for each feature/fix. After you finish writing and testing your feature/fix, open a pull request to merge your branch with the main. Please write meaningful comments to your commits and pull requests.
 
 #### How to Branch
 
@@ -65,6 +66,6 @@ For `<subteam-initial>`, use `n` for navigation, `i` for image recognition, `e` 
 
 #### How to open a pull request
 
-- Open the branch page in GitHub.
+- Open the branch page on GitHub.
 - Use the `contribute` button to open a PR (pull request).
 - Your code is ready to be reviewed and merged. Great work!
