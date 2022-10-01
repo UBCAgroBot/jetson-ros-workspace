@@ -21,7 +21,7 @@ ros2 run navigation center_row_publisher
 To start the camera run:
 
 ```bash
-roslaunch realsense2_camera rs_camera.launch device_type:=d455
+ros2 launch realsense2_camera rs_launch.py
 ```
 
 The image stream is published to multiple topics. We will be using `/camera/color/image_raw`.
