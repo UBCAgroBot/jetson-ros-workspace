@@ -12,7 +12,7 @@ class MockCameraPublisher(Node):
     def __init__(self):
         super().__init__('mock_camera_publisher')
         self.publisher_ = self.create_publisher(Image, 'mock_image_stream', 10)
-        timer_period = 0.5  # seconds
+        timer_period = 1 / 30  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.br = CvBridge()
 
@@ -33,11 +33,14 @@ class MockCameraPublisher(Node):
         self.pointer = 0
 
     def timer_callback(self):
-        msg = Image()
-        msg.data = self.br.cv2_to_imgmsg(np.array(self.images[self.pointer]), "bgr8")
+        msg = self.br.cv2_to_imgmsg(self.images[self.pointer], "bgr8")
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing image {self.pointer}')
         self.pointer += 1
+        
+        if self.pointer >= len(self.images):
+            self.pointer = 0
+            print("Looping back to first image")
 
 
 def main(args=None):

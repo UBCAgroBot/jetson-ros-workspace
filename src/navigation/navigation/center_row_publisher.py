@@ -11,6 +11,7 @@ class CenterRowPublisher(AlgorithmPublisher):
 def main(args=None):
     rclpy.init(args=args)
 
+    # set debug to true to use the mock camera publisher
     center_row_publisher = CenterRowPublisher(debug=False)
 
     rclpy.spin(center_row_publisher)

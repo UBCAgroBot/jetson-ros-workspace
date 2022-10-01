@@ -15,7 +15,8 @@ class AlgorithmPublisher(Node):
         super().__init__('algorithm_publisher')
         # if debug is true, we will use the mock camera publisher topic
         self.topic = 'mock_image_stream' if debug else image_topic
-        
+        self.encoding = 'bgr8' if debug else 'passthrough'
+
         self.subscription = self.create_subscription(
             Image,
             self.topic,
@@ -33,12 +34,13 @@ class AlgorithmPublisher(Node):
         print(self.algorithm, self.topic)
 
     def listener_callback(self, data):
-        current_frame = self.br.imgmsg_to_cv2(data)
-        cv.imshow(f'realsense footage', current_frame)
+        current_frame = self.br.imgmsg_to_cv2(data, self.encoding)
+        cv.imshow('input', current_frame)
         cv.waitKey(1)
         processed_image, intersection_point = self.algorithm.processFrame(current_frame, show=self.debug)
         msg = String()
         msg.data = str(intersection_point)
         self.publisher.publish(msg)
         self.get_logger().info(f'Publishing intersection point: {intersection_point}')
-        cv.imshow(f'{self.algorithm_name} algorithm', processed_image)
+        cv.imshow('output', processed_image)
+        cv.waitKey(1)
