@@ -11,10 +11,10 @@ from src.helper_scripts.get_algorithm import get_algorithm
 
 class AlgorithmPublisher(Node):
 
-    def __init__(self, algorithm, debug=False, image_topic='/camera/color/image_raw'):
+    def __init__(self, algorithm_name, debug=False, image_topic='/camera/color/image_raw'):
         super().__init__('algorithm_publisher')
         # if debug is true, we will use the mock camera publisher topic
-        self.topic = 'mock_image_stream' if debug else image_topic
+        self.topic = 'navigation/mock_camera' if debug else image_topic
         self.encoding = 'bgr8' if debug else 'passthrough'
 
         self.subscription = self.create_subscription(
@@ -23,12 +23,11 @@ class AlgorithmPublisher(Node):
             self.listener_callback,
             qos_profile_sensor_data)
         self.subscription  # prevent unused variable warning
-        self.publisher = self.create_publisher(String, f'{algorithm}_data', 10)
+        self.publisher = self.create_publisher(String, f'navigation/{algorithm_name}', 10)
         self.br = CvBridge()
         self.debug = debug
-        self.algorithm_name = algorithm
         try:
-            self.algorithm = get_algorithm(algorithm)
+            self.algorithm = get_algorithm(algorithm_name)
         except ValueError as err:
             sys.exit(err.args)
         print(self.algorithm, self.topic)
