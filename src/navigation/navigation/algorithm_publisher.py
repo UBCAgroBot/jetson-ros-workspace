@@ -15,7 +15,7 @@ class AlgorithmPublisher(Node):
         super().__init__('algorithm_publisher')
         # if debug is true, we will use the mock camera publisher topic
         self.topic = 'navigation/mock_camera' if debug else image_topic
-        self.encoding = 'bgr8' if debug else 'passthrough'
+        self.encoding = 'bgr8'
 
         self.subscription = self.create_subscription(
             Image,
