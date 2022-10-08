@@ -24,6 +24,10 @@ To install `ros2`, follow [this page from the ROS 2 docs](https://docs.ros.org/e
 
 Also, **make sure to complete** [Beginner CLI Tools](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools.html) and [Beginner Client Libraries](https://docs.ros.org/en/foxy/Tutorials/Beginner-Client-Libraries.html) since they cover important fundamentals of ROS 2 and also guide you with setting up your environment and the installation of `colcon` and `rqt`.
 
+### Docs
+
+- [Navigation](./src/navigation/README.md)
+
 ### Troubleshooting
 
 - If you see a similar error when running `colcon build` error:
