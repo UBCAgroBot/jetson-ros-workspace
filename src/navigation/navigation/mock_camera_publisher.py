@@ -3,7 +3,6 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-import numpy as np
 import sys
 import cv2 as cv
 
@@ -17,15 +16,11 @@ class MockCameraPublisher(Node):
         self.br = CvBridge()
 
         # we expect images/ to contain a bunch of images that we can use to mock a camera stream
-        filenames = glob.glob(f"src/navigation/images/*.png")
-        filenames.sort()
-        
-        print("Reading images")
-        self.images = [cv.imread(img) for img in filenames]
-        print("Read images")
+        self.filenames = glob.glob(f"src/navigation/images/*.png")
+        self.filenames.sort()
 
         # exit if no images are found
-        if len(self.images) == 0:
+        if len(self.filenames) == 0:
             print("No images found in ../images/")
             sys.exit(1)
 
@@ -33,12 +28,13 @@ class MockCameraPublisher(Node):
         self.pointer = 0
 
     def timer_callback(self):
-        msg = self.br.cv2_to_imgmsg(self.images[self.pointer], "bgr8")
+        img = cv.imread(self.filenames[self.pointer])
+        msg = self.br.cv2_to_imgmsg(img, "bgr8")
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing image {self.pointer}')
         self.pointer += 1
-        
-        if self.pointer >= len(self.images):
+
+        if self.pointer >= len(self.filenames):
             self.pointer = 0
             print("Looping back to first image")
 
