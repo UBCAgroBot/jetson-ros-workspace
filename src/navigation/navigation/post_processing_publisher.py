@@ -22,7 +22,7 @@ class PostProcessingPublisher(Node):
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
         
-        self.subscrifption  # prevent unused variable warning
+        self.subscription  # prevent unused variable warning
         
 
 
