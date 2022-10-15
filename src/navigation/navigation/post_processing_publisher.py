@@ -83,9 +83,6 @@ class PostProcessingPublisher(Node):
         self.get_logger().info(f'Publishing string {self.counter}')
         self.counter += 1
         
-
-
-
 def main(args=None):
     rclpy.init(args=args)
 
@@ -98,7 +95,6 @@ def main(args=None):
     # when the garbage collector destroys the node object)
     post_processing_publisher.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
