@@ -10,7 +10,7 @@ class PostProcessingPublisher(Node):
 
     def __init__(self):
         super().__init__('post_processing_publisher')
-        self.publisher_ = self.create_publisher(String, 'navigation/post_processing', 10)
+        self.publisher_ = self.create_publisher(Float32MultiArray, 'navigation/post_processing', 10)
         self.topic_scanning = 'scanning'
         self.topic_mini_contours = 'mini_contours'
         self.topic_mini_contours_downwards = 'mini_contours_downwards'
@@ -79,7 +79,7 @@ class PostProcessingPublisher(Node):
 
         print(data, type(data))
 
-        self.publisher_.publish(String(msg))
+        self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing string {self.counter}')
         self.counter += 1
         
