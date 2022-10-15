@@ -8,21 +8,63 @@ import sys
 
 class PostProcessingPublisher(Node):
 
-    def __init__(self, topic:String):
+    def __init__(self):
         super().__init__('post_processing_publisher')
         self.publisher_ = self.create_publisher(String, 'navigation/post_processing', 10)
-        self.topic = topic
+        self.topic_scanning = 'scanning'
+        self.topic_mini_contours = 'mini_contours'
+        self.topic_mini_contours_downwards = 'mini_contours_downwards'
+        self.topic_center_row = 'center_row'
+        self.topic_check_row_end = 'check_row_end'
+        self.topic_hough = 'hough'
         self.counter = 0  # track which message we are sending
         self.xvalues = np.zeros(10)
         self.yvalues = np.zeros(10)
 
-        self.subscription = self.create_subscription(
+        self.subscription_scanning = self.create_subscription(
             String,
-            self.topic,
+            self.topic_scanning,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        self.subscription_mini_contours = self.create_subscription(
+            String,
+            self.topic_mini_contours,
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
         
-        self.subscription  # prevent unused variable warning
+        self.subscription_mini_contours_downwards = self.create_subscription(
+            String,
+            self.topic_mini_contours_downwards,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        self.subscription_hough = self.create_subscription(
+            String,
+            self.topic_hough,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        self.subscription_check_row_end = self.create_subscription(
+            String,
+            self.topic_check_row_end,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        self.subscription_center_row = self.create_subscription(
+            String,
+            self.topic_center_row,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+
+
+        self.subscription_center_row                # prevent unused variable warnings
+        self.subscription_check_row_end             
+        self.subscription_hough                     
+        self.subscription_mini_contours             
+        self.subscription_mini_contours_downwards   
+        self.subscription_scanning                  
         
 
 
@@ -38,7 +80,7 @@ class PostProcessingPublisher(Node):
         print(data, type(data))
 
         self.publisher_.publish(String(msg))
-        self.get_logger().info(f'Publishing string {self.pointer}')
+        self.get_logger().info(f'Publishing string {self.counter}')
         self.counter += 1
         
 
