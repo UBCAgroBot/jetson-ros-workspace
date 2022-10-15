@@ -12,7 +12,9 @@ class PostProcessingPublisher(Node):
         super().__init__('post_processing_publisher')
         self.publisher_ = self.create_publisher(String, 'navigation/post_processing', 10)
         self.topic = topic
-        self.pointer = 0  # track which message we are sending
+        self.counter = 0  # track which message we are sending
+        self.xvalues = np.zeros(10)
+        self.yvalues = np.zeros(10)
 
         self.subscription = self.create_subscription(
             String,
@@ -27,7 +29,9 @@ class PostProcessingPublisher(Node):
     def listener_callback(self, data:String):
         msg = Float32MultiArray()
         if data is not None:  # prevent empty strings
-            msg.data = Float32MultiArray(data)
+            self.xvalues[self.counter//10] = data[0]
+            self.yvalues[self.counter//10] = data[1]
+            msg.data = [np.mean(self.xvalues), np.mean(self.yvalues)]
         else:
             msg.data = [-1, -1]
 
@@ -35,8 +39,9 @@ class PostProcessingPublisher(Node):
 
         self.publisher_.publish(String(msg))
         self.get_logger().info(f'Publishing string {self.pointer}')
-        self.pointer += 1
+        self.counter += 1
         
+
 
 
 def main(args=None):
