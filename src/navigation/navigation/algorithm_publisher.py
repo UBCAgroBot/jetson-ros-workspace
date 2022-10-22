@@ -45,9 +45,9 @@ class AlgorithmPublisher(Node):
     def listener_callback(self, data):
         current_frame = self.br.imgmsg_to_cv2(data, self.encoding)
         self.display_frame('input', current_frame)
-        processed_frame, intersection_point = self.algorithm.process_frame(current_frame, show=self.show)
+        processed_frame, angle = self.algorithm.process_frame(current_frame, show=self.show)
         msg = String()
-        msg.data = str(intersection_point)
+        msg.data = str(angle)
         self.publisher.publish(msg)
-        self.get_logger().info(f'Publishing intersection point: {intersection_point}')
+        self.get_logger().info(f'Publishing intersection point: {angle}')
         self.display_frame('output', processed_frame)
