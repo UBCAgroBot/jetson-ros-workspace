@@ -49,5 +49,5 @@ class AlgorithmPublisher(Node):
         msg = String()
         msg.data = str(angle)
         self.publisher.publish(msg)
-        self.get_logger().info(f'Publishing intersection point: {angle}')
+        self.get_logger().info(f'Publishing angle: {angle}')
         self.display_frame('output', processed_frame)
