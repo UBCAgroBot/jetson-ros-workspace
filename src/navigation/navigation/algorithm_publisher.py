@@ -19,8 +19,6 @@ class AlgorithmPublisher(Node):
         self.declare_parameter('show', True, ParameterDescriptor(description='Sets whether or not process_frame will show frames'))
         self.show = self.get_parameter('show').value
 
-        print(self.is_mock_feed, self.show)
-
         # if 'mock' command line argument is true, we will use the mock camera publisher topic
         self.topic = 'navigation/mock_camera' if self.is_mock_feed else image_topic
         self.encoding = 'bgr8'
