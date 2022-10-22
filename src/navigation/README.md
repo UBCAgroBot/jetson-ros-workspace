@@ -29,23 +29,17 @@ Not passing any arguments will result in default argument values being used.
 
 #### `mock`
 
-**Type**: `bool`
-
-**True**: Use `navigation/mock_camera` for the image stream
-
-**False**: Use `/camera/color/image_raw` for the image stream
-
-**Default**: `True`
+- Type: `bool`
+- True: Use `navigation/mock_camera` for the image stream
+- False: Use `/camera/color/image_raw` for the image stream
+- Default: `True`
 
 #### `show`
 
-**Type**: `bool`
-
-**True**: Display the image stream and the processed frames.
-
-**False**: Do not display the image stream and the processed frames.
-
-**Default**: `True`
+- Type: `bool`
+- True: Display the image stream and the processed frames.
+- False: Do not display the image stream and the processed frames.
+- Default: `True`
 
 ## External Nodes and Topics
 
