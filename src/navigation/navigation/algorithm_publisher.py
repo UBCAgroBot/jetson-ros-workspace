@@ -1,6 +1,7 @@
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
+from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.qos import qos_profile_sensor_data
 import cv2 as cv
 from cv_bridge import CvBridge
@@ -11,10 +12,17 @@ from src.helper_scripts.get_algorithm import get_algorithm
 
 class AlgorithmPublisher(Node):
 
-    def __init__(self, algorithm_name, debug=False, image_topic='/camera/color/image_raw'):
+    def __init__(self, algorithm_name, image_topic='/camera/color/image_raw'):
         super().__init__('algorithm_publisher')
-        # if debug is true, we will use the mock camera publisher topic
-        self.topic = 'navigation/mock_camera' if debug else image_topic
+        self.declare_parameter('mock', False, ParameterDescriptor(description='Sets image_topic to the mock camera topic'))
+        self.is_mock_feed = self.get_parameter('mock').value
+        self.declare_parameter('show', True, ParameterDescriptor(description='Sets whether or not process_frame will show frames'))
+        self.show = self.get_parameter('show').value
+
+        print(self.is_mock_feed, self.show)
+
+        # if 'mock' command line argument is true, we will use the mock camera publisher topic
+        self.topic = 'navigation/mock_camera' if self.is_mock_feed else image_topic
         self.encoding = 'bgr8'
 
         self.subscription = self.create_subscription(
@@ -25,21 +33,23 @@ class AlgorithmPublisher(Node):
         self.subscription  # prevent unused variable warning
         self.publisher = self.create_publisher(String, f'navigation/{algorithm_name}', 10)
         self.br = CvBridge()
-        self.debug = debug
         try:
             self.algorithm = get_algorithm(algorithm_name)
         except ValueError as err:
             sys.exit(err.args)
         print(self.algorithm, self.topic)
 
+    def display_frame(self, win_name, frame):
+        if self.show:
+            cv.imshow(win_name, frame)
+            cv.waitKey(1)
+
     def listener_callback(self, data):
         current_frame = self.br.imgmsg_to_cv2(data, self.encoding)
-        cv.imshow('input', current_frame)
-        cv.waitKey(1)
-        processed_image, intersection_point = self.algorithm.processFrame(current_frame, show=self.debug)
+        self.display_frame('input', current_frame)
+        processed_frame, intersection_point = self.algorithm.process_frame(current_frame, show=self.show)
         msg = String()
         msg.data = str(intersection_point)
         self.publisher.publish(msg)
         self.get_logger().info(f'Publishing intersection point: {intersection_point}')
-        cv.imshow('output', processed_image)
-        cv.waitKey(1)
+        self.display_frame('output', processed_frame)
