@@ -10,7 +10,7 @@ class PostProcessingPublisher(Node):
 
     def __init__(self):
         super().__init__('post_processing_publisher')
-        self.publisher_ = self.create_publisher(Float32MultiArray, 'navigation/post_processing', 10)
+        self.publisher_ = self.create_publisher(String, 'navigation/post_processing', 10)
         self.topic_scanning = 'scanning'
         self.topic_mini_contours = 'mini_contours'
         self.topic_mini_contours_downwards = 'mini_contours_downwards'
@@ -18,8 +18,7 @@ class PostProcessingPublisher(Node):
         self.topic_check_row_end = 'check_row_end'
         self.topic_hough = 'hough'
         self.counter = 0  # track which message we are sending
-        self.xvalues = np.zeros(10)
-        self.yvalues = np.zeros(10)
+        self.angles = np.zeros(10)
 
         self.subscription_scanning = self.create_subscription(
             String,
@@ -57,8 +56,6 @@ class PostProcessingPublisher(Node):
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
 
-
-
         self.subscription_center_row                # prevent unused variable warnings
         self.subscription_check_row_end             
         self.subscription_hough                     
@@ -66,23 +63,22 @@ class PostProcessingPublisher(Node):
         self.subscription_mini_contours_downwards   
         self.subscription_scanning                  
         
-
-
+        
     def listener_callback(self, data:String):
-        msg = Float32MultiArray()
+        msg = String()
         if data is not None:  # prevent empty strings
-            self.xvalues[self.counter//10] = data[0]
-            self.yvalues[self.counter//10] = data[1]
-            msg.data = [np.mean(self.xvalues), np.mean(self.yvalues)]
+            self.angles[self.counter//10] = data
+            msg.data = String(np.mean(self.angles))
         else:
-            msg.data = [-1, -1]
+            msg.data = None
 
-        print(data, type(data))
+        print(data, type(data)) # val and type checking
 
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing string {self.counter}')
         self.counter += 1
         
+
 def main(args=None):
     rclpy.init(args=args)
 
