@@ -4,16 +4,13 @@ from .algorithm_publisher import AlgorithmPublisher
 
 class MiniContoursDownwardsPublisher(AlgorithmPublisher):
 
-    def __init__(self, debug=False):
-        super().__init__('mini_contours_downwards', debug)
+    def __init__(self):
+        super().__init__('mini_contours_downward')
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    # set debug to true to use the mock camera publisher
-    mini_contours_downwards_publisher = MiniContoursDownwardsPublisher(debug=False)
-
+    mini_contours_downwards_publisher = MiniContoursDownwardsPublisher()
     rclpy.spin(mini_contours_downwards_publisher)
 
     # Destroy the node explicitly

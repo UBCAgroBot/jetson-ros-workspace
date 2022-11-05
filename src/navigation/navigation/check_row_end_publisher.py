@@ -4,16 +4,13 @@ from .algorithm_publisher import AlgorithmPublisher
 
 class CheckRowEndPublisher(AlgorithmPublisher):
 
-    def __init__(self, debug=False):
-        super().__init__('check_row_end', debug)
+    def __init__(self):
+        super().__init__('check_row_end')
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    # set debug to true to use the mock camera publisher
-    check_row_end_publisher = CheckRowEndPublisher(debug=False)
-
+    check_row_end_publisher = CheckRowEndPublisher()
     rclpy.spin(check_row_end_publisher)
 
     # Destroy the node explicitly

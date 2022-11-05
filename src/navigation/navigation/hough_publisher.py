@@ -4,16 +4,13 @@ from .algorithm_publisher import AlgorithmPublisher
 
 class HoughPublisher(AlgorithmPublisher):
 
-    def __init__(self, debug=False):
-        super().__init__('hough', debug)
+    def __init__(self):
+        super().__init__('hough')
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    # set debug to true to use the mock camera publisher
-    hough_publisher = HoughPublisher(debug=False)
-
+    hough_publisher = HoughPublisher()
     rclpy.spin(hough_publisher)
 
     # Destroy the node explicitly

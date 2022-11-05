@@ -4,16 +4,13 @@ from .algorithm_publisher import AlgorithmPublisher
 
 class ScanningPublisher(AlgorithmPublisher):
 
-    def __init__(self, debug=False):
-        super().__init__('scanning', debug)
+    def __init__(self):
+        super().__init__('scanning')
 
 
 def main(args=None):
     rclpy.init(args=args)
-
-    # set debug to true to use the mock camera publisher
-    scanning_publisher = ScanningPublisher(debug=False)
-
+    scanning_publisher = ScanningPublisher()
     rclpy.spin(scanning_publisher)
 
     # Destroy the node explicitly
