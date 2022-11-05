@@ -75,6 +75,6 @@ The image stream is published to multiple topics. We will be using `/camera/colo
 
 List of important links that include information on the topics and on the arguments for the launch file:
 
-- <https://dev.intelrealsense.com/docs/ros-wrapper>
-- <https://index.ros.org/r/realsense2_camera/>
-- <https://github.com/intel/ros2_intel_realsense>
+- https://dev.intelrealsense.com/docs/ros-wrapper
+- https://index.ros.org/r/realsense2_camera
+- https://github.com/intel/ros2_intel_realsense
