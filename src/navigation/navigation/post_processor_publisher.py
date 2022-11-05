@@ -66,6 +66,7 @@ class PostProcessorPublisher(Node):
         self.subscription_scanning
 
     def listener_callback(self, in_msg: String):
+        # Used in debugging angles stored for avg calculation
         # print(self.angles)
         out_msg = String()
         if in_msg.data != 'None':
