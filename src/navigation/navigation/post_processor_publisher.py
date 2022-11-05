@@ -1,8 +1,9 @@
+import numpy as np
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
-import numpy as np
+
 
 class PostProcessorPublisher(Node):
 
@@ -30,7 +31,7 @@ class PostProcessorPublisher(Node):
             self.topic_mini_contour,
             self.listener_callback,
             qos_profile_sensor_data)
-        
+
         # self.subscription_mini_contour_downward = self.create_subscription(
         #     String,
         #     self.topic_mini_contour_downward,
@@ -58,23 +59,23 @@ class PostProcessorPublisher(Node):
         # prevent unused variable warnings
         self.subscription_center_row
         # self.subscription_check_row_end             
-        self.subscription_hough                     
-        self.subscription_mini_contour           
+        self.subscription_hough
+        self.subscription_mini_contour
         # self.subscription_mini_contour_downward
-        self.subscription_scanning                  
+        self.subscription_scanning
 
-
-    def listener_callback(self, in_msg:String):
+    def listener_callback(self, in_msg: String):
         # print(self.angles)
         out_msg = String()
         if in_msg.data != 'None':
-            self.angles[self.counter%self.array_size] = float(in_msg.data)
+            self.angles[self.counter % self.array_size] = float(in_msg.data)
             self.counter += 1
         out_angle = f'{np.mean(self.angles):.2f}'
         # TODO: Chihan will change use out_angle and change out_msg.data with his output
         out_msg.data = out_angle
         self.publisher_.publish(out_msg)
         self.get_logger().info('Subscribed angle: {:10s} Published angle: {:10s}'.format(str(in_msg.data), out_angle))
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -88,6 +89,7 @@ def main(args=None):
     # when the garbage collector destroys the node object)
     post_processor_publisher.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
