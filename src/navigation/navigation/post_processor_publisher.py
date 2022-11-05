@@ -31,6 +31,7 @@ class PostProcessorPublisher(Node):
             self.topic_mini_contour,
             self.listener_callback,
             qos_profile_sensor_data)
+
         # Commented as currently only using front facing algorrithms.
         # self.subscription_mini_contour_downward = self.create_subscription(
         #     String,
