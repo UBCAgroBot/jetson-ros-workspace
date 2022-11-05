@@ -2,10 +2,10 @@
 
 ## Internal Nodes and Topics
 
-| Node                  | Description                          | Subscribed Topics       | Command Line Arguments      | Published Topics       |
-| --------------------- | ------------------------------------ | ----------------------- | --------------------------- | ---------------------- |
-| mock_camera_publisher | Publishes a mock camera image stream |                         | video                       | navigation/mock_camera |
-| algorithm_publisher   | Runs algorithm on image stream       | /camera/color/image_raw | algorithm\*<br>mock<br>show | navigation/`algorithm` |
+| Node                  | Description                          | Subscribed Topics       | Command Line Arguments      | Published Topics         |
+| --------------------- | ------------------------------------ | ----------------------- | --------------------------- | ------------------------ |
+| mock_camera_publisher | Publishes a mock camera image stream |                         | video                       | navigation/mock_camera   |
+| algorithm_publisher   | Runs algorithm on image stream       | /camera/color/image_raw | algorithm\*<br>mock<br>show | navigation/\<algorithm\> |
 
 To run a node, run the following command:
 
