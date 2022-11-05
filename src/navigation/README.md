@@ -2,16 +2,15 @@
 
 ## Internal Nodes and Topics
 
-| Node                  | Description                               | Subscribed Topics       | Command Line Arguments | Published Topics       |
-| --------------------- | ----------------------------------------- | ----------------------- | ---------------------- | ---------------------- |
-| mock_camera_publisher | Publishes a mock camera image stream      |                         | video                  | navigation/mock_camera |
-| center_row_publisher  | Runs center_row_algorithm on image stream | /camera/color/image_raw | mock<br>show           | navigation/center_row  |
+| Node                  | Description                          | Subscribed Topics       | Command Line Arguments      | Published Topics         |
+| --------------------- | ------------------------------------ | ----------------------- | --------------------------- | ------------------------ |
+| mock_camera_publisher | Publishes a mock camera image stream |                         | video                       | navigation/mock_camera   |
+| algorithm_publisher   | Runs algorithm on image stream       | /camera/color/image_raw | algorithm\*<br>mock<br>show | navigation/\<algorithm\> |
 
-To run the nodes, run the following commands:
+To run a node, run the following command:
 
 ```bash
 ros2 run navigation mock_camera_publisher
-ros2 run navigation center_row_publisher
 ```
 
 ## Nodes with Command Line Arguments
@@ -19,11 +18,11 @@ ros2 run navigation center_row_publisher
 You can also run the nodes with the command line arguments:
 
 ```bash
-ros2 run navigation center_row_publisher --ros-args -p mock:=False
-ros2 run navigation center_row_publisher --ros-args -p mock:=True -p show:=True
+ros2 run navigation algorithm_publisher --ros-args -p algorithm:=center_row
+ros2 run navigation algorithm_publisher --ros-args -p algorithm:=center_row -p mock:=False -p show:=True
 ```
 
-Not passing any arguments will result in default argument values being used.
+Not passing any arguments will result in default argument values being used. Arguments marked with \* are required.
 
 ### mock_camera_publisher
 
@@ -34,7 +33,19 @@ Not passing any arguments will result in default argument values being used.
 - False: Use as the mock camera image stream
 - Default: `''`
 
-### center_row_publisher
+### algorithm_publisher
+
+#### `algorithm`
+
+- Type: `string`
+- String: The name of the algorithm to run:
+  - `hough`
+  - `center_row`
+  - `mini_contour`
+  - `mini_contour_downward`
+  - `scanning`
+  - `check_row_end`
+- Required
 
 #### `mock`
 
@@ -65,5 +76,5 @@ The image stream is published to multiple topics. We will be using `/camera/colo
 List of important links that include information on the topics and on the arguments for the launch file:
 
 - https://dev.intelrealsense.com/docs/ros-wrapper
-- https://index.ros.org/r/realsense2_camera/
+- https://index.ros.org/r/realsense2_camera
 - https://github.com/intel/ros2_intel_realsense

@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             'mock_camera_publisher = navigation.mock_camera_publisher:main',
-            'center_row_publisher = navigation.center_row_publisher:main'
+            'algorithm_publisher = navigation.algorithm_publisher:main',
+            'post_processor_publisher = navigation.post_processor_publisher:main'
         ]
     },
 )
