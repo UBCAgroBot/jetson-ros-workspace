@@ -20,7 +20,7 @@ algo_list = [('hough', HoughAlgorithm), ('center_row', CenterRowAlgorithm), ('mi
 def get_algorithm(algorithm_name) -> Algorithm:
     # verify that config file for algorithm exists
     if not path.isfile(f'./Navigation/config/algorithm/{algorithm_name}.yaml'):
-        print(f"--alg config for {algorithm_name} is not defined in ./config/algorithm/", 'haha')
+        print(f"--alg config for {algorithm_name} is not defined in ./config/algorithm/")
         sys.exit()
 
     # set config
