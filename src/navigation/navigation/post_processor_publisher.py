@@ -59,7 +59,7 @@ class PostProcessorPublisher(Node):
 
         # prevent unused variable warnings
         self.subscription_center_row
-        # self.subscription_check_row_end             
+        # self.subscription_check_row_end
         self.subscription_hough
         self.subscription_mini_contour
         # self.subscription_mini_contour_downward

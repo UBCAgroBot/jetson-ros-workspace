@@ -1,16 +1,15 @@
+from omegaconf import OmegaConf
+import os.path as path
+from Navigation.algorithms.Algorithm import Algorithm
+from Navigation.algorithms.ScanningAlgorithm import ScanningAlgorithm
+from Navigation.algorithms.MiniContoursDownwards import MiniContoursDownwards
+from Navigation.algorithms.MiniContoursAlgorithm import MiniContoursAlgorithm
+from Navigation.algorithms.HoughAlgorithm import HoughAlgorithm
+from Navigation.algorithms.CheckRowEnd import CheckRowEnd
+from Navigation.algorithms.CenterRowAlgorithm import CenterRowAlgorithm
 import sys
 sys.path.append("./Navigation/")
 
-from Navigation.algorithms.CenterRowAlgorithm import CenterRowAlgorithm
-from Navigation.algorithms.CheckRowEnd import CheckRowEnd
-from Navigation.algorithms.HoughAlgorithm import HoughAlgorithm
-from Navigation.algorithms.MiniContoursAlgorithm import MiniContoursAlgorithm
-from Navigation.algorithms.MiniContoursDownwards import MiniContoursDownwards
-from Navigation.algorithms.ScanningAlgorithm import ScanningAlgorithm
-from Navigation.algorithms.Algorithm import Algorithm
-
-import os.path as path
-from omegaconf import OmegaConf
 
 algo_list = [('hough', HoughAlgorithm), ('center_row', CenterRowAlgorithm), ('mini_contour', MiniContoursAlgorithm),
              ('mini_contour_downward', MiniContoursDownwards),
