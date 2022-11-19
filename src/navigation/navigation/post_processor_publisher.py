@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
+from src.helper_scripts.controller import PID_controller
 
 
 class PostProcessorPublisher(Node):
@@ -19,6 +20,7 @@ class PostProcessorPublisher(Node):
         self.counter = 0  # track which message we are sending
         self.array_size = 10
         self.angles = np.zeros(self.array_size)
+        self.pid = PID_controller()
 
         self.subscription_scanning = self.create_subscription(
             String,
@@ -74,7 +76,7 @@ class PostProcessorPublisher(Node):
             self.counter += 1
         out_angle = f'{np.mean(self.angles):.2f}'
         # TODO: Chihan will change use out_angle and change out_msg.data with his output
-        out_msg.data = out_angle
+        out_msg.data = self.pid.move(out_angle)
         self.publisher_.publish(out_msg)
         self.get_logger().info('Subscribed angle: {:10s} Published angle: {:10s}'.format(str(in_msg.data), out_angle))
 
