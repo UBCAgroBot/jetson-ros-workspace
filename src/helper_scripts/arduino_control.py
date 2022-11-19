@@ -4,7 +4,7 @@ import serial
 
 
 class arduino_control:
-    """ Send data to arduino through serial USB port.
+    """ Send angle data to arduino through serial USB port.
     """
 
     def __init__(self, port="/dev/ttyACM0", debug_mode=False):
