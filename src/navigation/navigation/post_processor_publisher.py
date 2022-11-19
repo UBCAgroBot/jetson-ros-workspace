@@ -1,10 +1,13 @@
 import numpy as np
 import rclpy
+import sys
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
-from src.helper_scripts.controller import PID_controller
 
+sys.path.append(".")
+
+from src.helper_scripts.controller import PID_controller
 
 class PostProcessorPublisher(Node):
 

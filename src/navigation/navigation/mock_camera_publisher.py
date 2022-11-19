@@ -7,6 +7,7 @@ from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 
+sys.path.append(".")
 
 class MockCameraPublisher(Node):
 
