@@ -30,8 +30,8 @@ Not passing any arguments will result in default argument values being used. Arg
 #### `video`
 
 - Type: `string`
-- True: Use a video file as the mock camera image stream
-- False: Use as the mock camera image stream
+- String: use the video file at `src/navigation/videos/<video>.mp4` as the mock camera stream
+- Empty string / undefined: use the images in `src/navigation/images/*.png` for the mock camera stream
 - Default: `''`
 
 ### algorithm_publisher
