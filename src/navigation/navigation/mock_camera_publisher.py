@@ -1,8 +1,7 @@
-import glob
-import sys
-
 import cv2 as cv
+import glob
 import rclpy
+import sys
 from cv_bridge import CvBridge
 from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
