@@ -2,6 +2,7 @@ import time
 import math
 import serial
 
+
 class arduino_control:
 
     def __init__(self, port="/dev/ttyACM0", debug_mode=False):
@@ -9,7 +10,7 @@ class arduino_control:
         self.debug_mode = debug_mode
 
     def send(self, angle, speed=1):
-        self.arduino.write(bytes(str(angle),"ascii"))
+        self.arduino.write(bytes(str(angle), "ascii"))
         if (self.debug_mode):
             print("ARDUINO CONFIRMS THIS DATA:", int(str(self.arduino.readline()).split("\\")[0].split("'")[1]))
 
