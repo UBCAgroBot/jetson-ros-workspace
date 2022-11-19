@@ -6,6 +6,7 @@ import serial
 class arduino_control:
     """ Send data to arduino through serial USB port.
     """
+
     def __init__(self, port="/dev/ttyACM0", debug_mode=False):
         """
         Parameters
@@ -20,9 +21,9 @@ class arduino_control:
         """ Current version only sends angle to the arduino
         Parameters
         ----------
-        angle: Must be between -90 and 90. 
+        angle: Must be between -90 and 90.
         """
-        self.arduino.write(bytes(str(angle),"ascii"))
+        self.arduino.write(bytes(str(angle), "ascii"))
         if (self.debug_mode):
             print("ARDUINO CONFIRMS THIS DATA:", int(str(self.arduino.readline()).split("\\")[0].split("'")[1]))
 
