@@ -2,6 +2,7 @@ import time
 import math
 import serial
 
+
 class arduino_control:
     """ Send data to arduino through serial USB port.
     """
