@@ -33,7 +33,6 @@ class PID_controller:
         Parameters
         ----------
         current : int or float
-
         target : int or float, default is 0.0
 
         Returns
