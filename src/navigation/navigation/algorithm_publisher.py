@@ -1,3 +1,4 @@
+from src.helper_scripts.get_algorithm import get_algorithm
 import cv2 as cv
 import sys
 import rclpy
@@ -10,16 +11,16 @@ from std_msgs.msg import String
 
 sys.path.append(".")
 
-from src.helper_scripts.get_algorithm import get_algorithm
-
 
 class AlgorithmPublisher(Node):
 
     def __init__(self, image_topic='/camera/color/image_raw'):
         super().__init__('algorithm_publisher')
-        self.declare_parameter('mock', False, ParameterDescriptor(description='Sets image_topic to the mock camera topic'))
+        self.declare_parameter('mock', False, ParameterDescriptor(
+            description='Sets image_topic to the mock camera topic'))
         self.is_mock_feed = self.get_parameter('mock').value
-        self.declare_parameter('show', True, ParameterDescriptor(description='Sets whether or not process_frame will show frames'))
+        self.declare_parameter('show', True, ParameterDescriptor(
+            description='Sets whether or not process_frame will show frames'))
         self.show = self.get_parameter('show').value
         self.declare_parameter('algorithm', '', ParameterDescriptor(description='Name of algorithm to use'))
         self.algorithm_name = self.get_parameter('algorithm').value
@@ -59,6 +60,7 @@ class AlgorithmPublisher(Node):
         self.publisher.publish(msg)
         self.get_logger().info(f'Publishing angle: {angle}')
         self.display_frame('output', processed_frame)
+
 
 def main(args=None):
     rclpy.init(args=args)
