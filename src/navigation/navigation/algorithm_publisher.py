@@ -1,4 +1,3 @@
-from src.helper_scripts.get_algorithm import get_algorithm
 import cv2 as cv
 import sys
 import rclpy
@@ -10,6 +9,7 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import String
 
 sys.path.append(".")
+from src.helper_scripts.get_algorithm import get_algorithm
 
 
 class AlgorithmPublisher(Node):
