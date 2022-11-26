@@ -10,7 +10,7 @@ MYPORT = '/dev/tty.usbmodem1101'
 if __name__ == '__main__':
     board = pyfirmata.Arduino(MYPORT)
     print("Communication Successfully started")
-    
+
     # will make the board led light flash rapidly
     while True:
         board.digital[13].write(1)
