@@ -25,7 +25,7 @@ class AlgorithmPublisher(Node):
         self.declare_parameter('algorithm', '', ParameterDescriptor(description='Name of algorithm to use'))
         self.algorithm_name = self.get_parameter('algorithm').value
 
-        if self.algorithm_name is '':
+        if self.algorithm_name == '':
             raise ValueError("Algorithm is not defined. Please set the 'algorithm' parameter")
 
         # if 'mock' command line argument is true, we will use the mock camera publisher topic
