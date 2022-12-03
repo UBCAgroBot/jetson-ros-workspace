@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+## WORK IN PROGRESS TO PORT CODE FROM Wheel_Keyboard.ino INTO PYFIRMATA
 import pyfirmata
 import time
 
