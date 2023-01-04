@@ -1,3 +1,10 @@
+"""
+Listens to keyboard presses and sends a string message to the Arduino
+Output Format: "XY" where
+    X = (H = Halt, F = Forward, B = Backward)
+    Y = (S = Straight, L = Left, R = Right)
+To be used in conjunction with the StringReceiver.ino
+"""
 import time
 import pyfirmata
 from pynput import keyboard
@@ -6,7 +13,7 @@ from pynput import keyboard
 Debug flag for button press outputs and output messages
 0 = no debug(only final string printed), 1 = output message array, 2 = key presses
 '''
-debug_level = 0
+debug_level = 1
 
 
 def debug_print(output, level=0):
@@ -77,5 +84,5 @@ while True:
     message = [ord(c) for c in message]
     debug_print(message, 1)
     board.send_sysex(pyfirmata.START_SYSEX, message)
-    time.sleep(0.1)
+    time.sleep(1)
     pass
