@@ -78,58 +78,95 @@ const float REV_ANGLE = 360.0 / 400.0;
 // max turning angle
 const float MAX_ANGLE = 90.0;
 
-// enum for directions
-enum directions {
-  undefined,
+// enum for vertical directions
+enum v_directions {
+  halted,
   forward,
+  backward
+};
+
+// enum for horizontal directions
+enum h_directions {
+  straight,
   left,
-  backward,
   right
 };
 
 // variable for stepper direction [left, right]
-enum directions angular_dir = undefined;
+enum h_directions angular_dir = straight;
 
 // variable for gearbox direction [forward, backward]
-enum directions movement_dir = undefined;
+enum v_directions movement_dir = halted;
 
 // current_angle of stepper motor
 float current_angle = 0.0;
+
+// input string buffer
+char buf[80];
 
 void loop() {
   bool is_valid_input = true;
   
   // to send serial data, use the Serial Monitor tool
-  if (Serial.available()) {
-    is_valid_input = update_dir_enums(Serial.read());
+  if (readline(Serial.read(), buf, 80) > 0) {
+    is_valid_input = update_dir_enums(buf);
   }
   if (is_valid_input) {
     run();
   }
 }
 
+// Read a line of text from serial input
+int readline(int readch, char *buffer, int len) {
+    static int pos = 0;
+    int rpos;
+
+    if (readch > 0) {
+        switch (readch) {
+            case '\r': // Ignore CR
+                break;
+            case '\n': // Return on new-line
+                rpos = pos;
+                pos = 0;  // Reset position index ready for next time
+                return rpos;
+            default:
+                if (pos < len-1 && readch > 0 && readch < 128) {
+                    //Serial.println(readch);
+                    buffer[pos++] = readch;
+                    buffer[pos] = 0;
+                }
+        }
+    }
+    return 0;
+}
+
 // update direction enums
 // returns true if input is a valid value, 
 // othwerise returns false
-int update_dir_enums(int input) {
-  switch (input) {
-    case 'w':
+int update_dir_enums(String input) {
+  switch (input.charAt(0)) {
+    case 'H':
+      halt();
+      break;
+    case 'F':
       set_forward();
       break;
-    case 'a':
-      set_left();
-      break;
-    case 's':
+    case 'B':
       set_backward();
       break;
-    case 'd':
-      set_right();
+    default:
+      return false;
+  }
+      
+  switch (input.charAt(1)) {
+    case 'L':
+      set_left();
       break;
-    case 'r':
+    case 'S':
       reset_angle();
       break;
-    case 'h':
-      halt();
+    case 'R':
+      set_right();
       break;
     default:
       return false;
@@ -139,21 +176,20 @@ int update_dir_enums(int input) {
 
 // sets direction value to desired value if it is not already set to that value,
 // otherwise, interpret action as an instruction to stop, and set to undefined
-
 void set_forward() {
-  movement_dir = movement_dir == forward ? undefined : forward;
+  movement_dir = forward;
 }
 
 void set_left() {
-  angular_dir = angular_dir == left ? undefined : left;
+  angular_dir = left;
 }
 
 void set_backward() {
-  movement_dir = movement_dir == backward ? undefined : backward;
+  movement_dir = backward;
 }
 
 void set_right() {
-  angular_dir = angular_dir == right ? undefined : right;
+  angular_dir = right;
 }
 
 // resets the stepper motor angle to 0 degrees
@@ -171,8 +207,10 @@ void reset_angle() {
   }
 
   // halt angular directions
-  angular_dir = undefined;
+  angular_dir = straight;
 
+  // TODO: investigate error with this line
+  // Serial.println("Straight");
   Serial.println("Reseting angle");
   const float turn_angle = abs(current_angle) / REV_ANGLE;
   for (int i = 0; i < turn_angle; i++) {
@@ -184,8 +222,7 @@ void reset_angle() {
 
 // halt any actions
 void halt() {
-  movement_dir = undefined;
-  angular_dir = undefined;
+  movement_dir = halted;
   Serial.println("Halt");
 }
 
@@ -193,7 +230,6 @@ void halt() {
 void run() {
   if (angular_dir == left) {
     if (current_angle <= -MAX_ANGLE) {
-      angular_dir = undefined;
       Serial.println("Max angle reached");
     } else {
       Serial.println("Turning left");
@@ -202,7 +238,6 @@ void run() {
     }
   } else if (angular_dir == right) {
     if (current_angle >= MAX_ANGLE) {
-      angular_dir = undefined;
       Serial.println("Max angle reached");
     } else {
       Serial.println("Turning right");
@@ -220,7 +255,7 @@ void run() {
   }
 
   // stop pwm
-  if (movement_dir == undefined) {
+  if (movement_dir == halted) {
     generatePWM(0);
   }
 }
