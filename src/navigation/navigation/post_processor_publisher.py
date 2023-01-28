@@ -16,7 +16,7 @@ class PostProcessorPublisher(Node):
     def __init__(self):
         super().__init__('post_processing_publisher')
 
-        self.ARDUINO_PORT = "/dev/ttyACM0"
+        self.ARDUINO_PORT = "/dev/ttyACM1"
         self.SEND_TIME_CONSTANT = 0.5
         self.LEFT_THRESHOLD = -10
         self.RIGHT_THRESHOLD = 10
