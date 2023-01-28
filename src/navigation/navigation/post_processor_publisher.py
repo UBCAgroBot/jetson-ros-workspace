@@ -30,6 +30,7 @@ class PostProcessorPublisher(Node):
         self.topic_center_row = 'navigation/center_row'
         self.topic_check_row_end = 'navigation/check_row_end'
         self.topic_hough = 'navigation/hough'
+        self.topic_seesaw = 'navigation/seesaw'
         self.counter = 0  # track which message we are sending
         self.array_size = 10
         self.angles = np.zeros(self.array_size)
@@ -68,6 +69,12 @@ class PostProcessorPublisher(Node):
         self.subscription_center_row = self.create_subscription(
             String,
             self.topic_center_row,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        self.subscription_Seesaw = self.create_subscription(
+            String,
+            self.topic_seesaw,
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
 
