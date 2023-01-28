@@ -1,6 +1,4 @@
-import time
-import math
-import serial
+import pyfirmata
 
 
 class arduino_control:
@@ -11,25 +9,20 @@ class arduino_control:
         """
         Parameters
         ----------
-        port: The USB port used by arduino, Default port is /dev/ttyACM0 which is the one used by Jetson. PCs usually to use COM4.
+        port: The USB port used by arduino, Default port is /dev/ttyACM0 which is the one used by Jetson. PCs use /dev/cu.usbmodem14201.
         debug_mode: When True, it prints messages sent by arduino via arduino's serial monitor.
         """
-        self.arduino = serial.Serial(port=port, baudrate=115200, timeout=0.1)
+        self.arduino = pyfirmata.Arduino(port)
         self.debug_mode = debug_mode
 
-    def send(self, angle, speed=1):
-        """ Current version only sends angle to the arduino
+    def send(self, move="H", turn="S"):
+        """ Send turning and movement information as strings
         Parameters
         ----------
-        angle: Must be between -90 and 90.
+        move: "F" = forward "H" = hold "B" = backwards
+        turn: "L" = left "S" = straigh "R" = right
         """
-        self.arduino.write(bytes(str(angle), "ascii"))
-        if (self.debug_mode):
-            print("ARDUINO CONFIRMS THIS DATA:", int(str(self.arduino.readline()).split("\\")[0].split("'")[1]))
-
-    def search_ports():
-        """ Show which USB ports are available. When arduino is conneced, one of these ports connects to it.
-        """
-        ports = list(serial.tools.list_ports.comports())
-        for p in ports:
-            print("PORT FOUND:", p)
+        message = [move, turn, "\n"]
+        message = [ord(c) for c in message]
+        print("Message sent to arduino:", message)
+        self.arduino.send_sysex(pyfirmata.START_SYSEX, message)

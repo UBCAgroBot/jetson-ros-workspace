@@ -3,19 +3,33 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
+import time
+import sys
+
+sys.path.append(".")
+from src.helper_scripts.arduino_control import arduino_control
 
 
 class PostProcessorPublisher(Node):
 
     def __init__(self):
         super().__init__('post_processing_publisher')
-        self.publisher_ = self.create_publisher(String, 'navigation/post_processing', 10)
+
+        self.ARDUINO_PORT = "/dev/ttyACM0"
+        self.SEND_TIME_CONSTANT = 0.5
+        self.LEFT_THRESHOLD = -10
+        self.RIGHT_THRESHOLD = 10
+
+        self.arduino_controller = arduino_control(port=self.ARDUINO_PORT)
+        self.last_send_time = time.time()
+
         self.topic_scanning = 'navigation/scanning'
         self.topic_mini_contour = 'navigation/mini_contour'
         self.topic_mini_contour_downward = 'navigation/mini_contour_downward'
         self.topic_center_row = 'navigation/center_row'
         self.topic_check_row_end = 'navigation/check_row_end'
         self.topic_hough = 'navigation/hough'
+        self.topic_seesaw = 'navigation/seesaw'
         self.counter = 0  # track which message we are sending
         self.array_size = 10
         self.angles = np.zeros(self.array_size)
@@ -57,6 +71,12 @@ class PostProcessorPublisher(Node):
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
 
+        self.subscription_Seesaw = self.create_subscription(
+            String,
+            self.topic_seesaw,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
         # prevent unused variable warnings
         self.subscription_center_row
         # self.subscription_check_row_end
@@ -72,11 +92,18 @@ class PostProcessorPublisher(Node):
         if in_msg.data != 'None':
             self.angles[self.counter % self.array_size] = float(in_msg.data)
             self.counter += 1
-        out_angle = f'{np.mean(self.angles):.2f}'
-        # TODO: Chihan will change use out_angle and change out_msg.data with his output
-        out_msg.data = out_angle
-        self.publisher_.publish(out_msg)
-        self.get_logger().info('Subscribed angle: {:10s} Published angle: {:10s}'.format(str(in_msg.data), out_angle))
+        out_angle = np.mean(self.angles)
+
+        current_time = time.time()
+        if (current_time > self.last_send_time + self.SEND_TIME_CONSTANT):
+            self.last_send_time = time.time()
+            print("out_angle on post processor node:", out_angle)
+            if out_angle < self.LEFT_THRESHOLD:
+                self.arduino_controller.send(move="F", turn="R")
+            elif out_angle > self.RIGHT_THRESHOLD:
+                self.arduino_controller.send(move="F", turn="L")
+            else:
+                self.arduino_controller.send(move="F", turn="S")
 
 
 def main(args=None):
