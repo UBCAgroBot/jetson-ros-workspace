@@ -4,6 +4,7 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
 import time
+import sys 
 
 sys.path.append(".")
 from src.helper_scripts.arduino_control import arduino_control
