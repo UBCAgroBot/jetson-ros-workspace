@@ -1,5 +1,6 @@
 import pyfirmata
 
+
 class arduino_control:
     """ Send angle data to arduino through serial USB port.
     """
