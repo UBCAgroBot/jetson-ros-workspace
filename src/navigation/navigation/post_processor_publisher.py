@@ -3,8 +3,11 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
-from utils import arduino_control
 import time
+
+sys.path.append(".")
+from src.helper_scripts.arduino_control import arduino_control
+
 
 class PostProcessorPublisher(Node):
 
@@ -17,7 +20,7 @@ class PostProcessorPublisher(Node):
         self.LEFT_THRESHOLD = -10
         self.RIGHT_THRESHOLD = 10
 
-        self.arduino_controller = arduino_control.arduino_control(port=self.ARDUINO_PORT)
+        self.arduino_controller = arduino_control(port=self.ARDUINO_PORT)
         self.last_send_time = time.time()
 
         self.topic_scanning = 'navigation/scanning'
