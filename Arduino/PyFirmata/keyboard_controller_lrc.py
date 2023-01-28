@@ -14,7 +14,7 @@ Debug flag for button press outputs and output messages
 0 = no debug(only final string printed), 1 = output message array, 2 = key presses
 '''
 debug_level = 1
-arduino_path = '/dev/cu.usbmodem14101'
+arduino_path = '/dev/ttyACM0'
 
 
 def debug_print(output, level=0):

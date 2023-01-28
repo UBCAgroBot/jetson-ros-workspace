@@ -16,7 +16,7 @@ class PostProcessorPublisher(Node):
     def __init__(self):
         super().__init__('post_processing_publisher')
 
-        self.ARDUINO_PORT = "/dev/ttyACM1"
+        self.ARDUINO_PORT = "/dev/ttyACM0"
         self.SEND_TIME_CONSTANT = 0.5
         self.LEFT_THRESHOLD = -10
         self.RIGHT_THRESHOLD = 10
@@ -92,12 +92,12 @@ class PostProcessorPublisher(Node):
         if (current_time > self.last_send_time + self.SEND_TIME_CONSTANT):
             self.last_send_time = time.time()
             print("out_angle on post processor node:", out_angle)
-            if out_angle < LEFT_THRESHOLD:
-                arduino_controller.send(move="F", turn="R")
-            elif out_angle > RIGHT_THRESHOLD:
-                arduino_controller.send(move="F", turn="L")
+            if out_angle < self.LEFT_THRESHOLD:
+                self.arduino_controller.send(move="F", turn="R")
+            elif out_angle > self.RIGHT_THRESHOLD:
+                self.arduino_controller.send(move="F", turn="L")
             else:
-                arduino_controller.send(move="F", turn="S")
+                self.arduino_controller.send(move="F", turn="S")
 
 def main(args=None):
     rclpy.init(args=args)
