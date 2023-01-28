@@ -4,14 +4,13 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
 import time
-import sys 
+import sys
 
 sys.path.append(".")
 from src.helper_scripts.arduino_control import arduino_control
 
 
 class PostProcessorPublisher(Node):
-
 
     def __init__(self):
         super().__init__('post_processing_publisher')
@@ -105,6 +104,7 @@ class PostProcessorPublisher(Node):
                 self.arduino_controller.send(move="F", turn="L")
             else:
                 self.arduino_controller.send(move="F", turn="S")
+
 
 def main(args=None):
     rclpy.init(args=args)

@@ -15,7 +15,7 @@ from omegaconf import OmegaConf
 
 
 algo_list = [('hough', HoughAlgorithm), ('center_row', CenterRowAlgorithm), ('mini_contour', MiniContoursAlgorithm),
-             ('mini_contour_downward', MiniContoursDownwards), ('scanning', ScanningAlgorithm), ('check_row_end', CheckRowEnd), 
+             ('mini_contour_downward', MiniContoursDownwards), ('scanning', ScanningAlgorithm), ('check_row_end', CheckRowEnd),
              ('seesaw', SeesawAlgorithm)]
 
 
