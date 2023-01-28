@@ -91,7 +91,8 @@ class PostProcessorPublisher(Node):
         current_time = time.time()
         if (current_time > self.last_send_time + self.SEND_TIME_CONSTANT):
             self.last_send_time = time.time()
-            if out_angle < LEFT_THRESHOLD: 
+            print("out_angle on post processor node:", out_angle)
+            if out_angle < LEFT_THRESHOLD:
                 arduino_controller.send(move="F", turn="R")
             elif out_angle > RIGHT_THRESHOLD:
                 arduino_controller.send(move="F", turn="L")

@@ -23,4 +23,5 @@ class arduino_control:
         """
         message = [move, turn, "\n"]
         message = [ord(c) for c in message]
+        print("Message sent to arduino:", message)
         self.arduino.send_sysex(pyfirmata.START_SYSEX, message)
