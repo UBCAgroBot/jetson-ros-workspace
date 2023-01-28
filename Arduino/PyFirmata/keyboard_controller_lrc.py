@@ -14,6 +14,7 @@ Debug flag for button press outputs and output messages
 0 = no debug(only final string printed), 1 = output message array, 2 = key presses
 '''
 debug_level = 1
+arduino_path = '/dev/cu.usbmodem14101'
 
 
 def debug_print(output, level=0):
@@ -74,7 +75,7 @@ listener.start()
 PyFirmata Section
 '''
 # Update the port as required
-board = pyfirmata.Arduino('/dev/cu.usbmodem14201')
+board = pyfirmata.Arduino(arduino_path)
 
 # Run the program
 while True:
