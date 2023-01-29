@@ -7,11 +7,14 @@ from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 
+sys.path.append(".")
+from src.helper_scripts.node_setup_helper import node_setup_helper
 
 class MockCameraPublisher(Node):
 
     def __init__(self):
         super().__init__('mock_camera_publisher')
+        node_setup_helper(self)
         self.declare_parameter('video', '', ParameterDescriptor(description='Sets the video feed to be used'))
         self.video = self.get_parameter('video').value
 
@@ -58,7 +61,7 @@ class MockCameraPublisher(Node):
     def publish_image(self, img):
         msg = self.br.cv2_to_imgmsg(img, "bgr8")
         self.publisher_.publish(msg)
-        self.get_logger().info(f'Publishing image {self.pointer}')
+        self.get_logger().info(f'image {self.pointer}')
 
 
 def main(args=None):
