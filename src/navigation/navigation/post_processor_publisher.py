@@ -11,13 +11,15 @@ from rclpy.node import Node
 sys.path.append(".")
 from src.helper_scripts.arduino_control import arduino_control
 from src.helper_scripts.node_setup_helper import node_setup_helper
+
+
 class PostProcessorPublisher(Node):
 
     def __init__(self):
         super().__init__('post_processing_publisher')
         node_setup_helper(self)
         self.declare_parameters(
-            namespace='', 
+            namespace='',
             parameters=[
                 ('port', '', ParameterDescriptor(description='Port name for Arduino')),
             ]

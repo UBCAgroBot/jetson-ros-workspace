@@ -10,6 +10,7 @@ from sensor_msgs.msg import Image
 sys.path.append(".")
 from src.helper_scripts.node_setup_helper import node_setup_helper
 
+
 class MockCameraPublisher(Node):
 
     def __init__(self):
