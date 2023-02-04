@@ -86,7 +86,7 @@ These arguments apply to all Nodes
 To start the camera run:
 
 ```bash
-ros2 launch realsense2_camera rs_launch.py
+ros2 launch realsense2_camera rs_launch.py device_type:=d455 initial_reset:=true
 ```
 
 The image stream is published to multiple topics. We will be using `/camera/color/image_raw`.
