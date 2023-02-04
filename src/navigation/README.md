@@ -103,7 +103,7 @@ We maintain a [ROS2 Launch file](/src/navigation/launch/navigation_launch.py) th
 
 ```bash
 # run launch file
-ros2 launch navigation mock_camera_launch.py
+ros2 launch navigation navigation_launch.py
 ```
 
 To configure arguments for individual nodes in the pipeline edit [params.yml](/src/navigation/config/params.yml) before running `colcon build`.
