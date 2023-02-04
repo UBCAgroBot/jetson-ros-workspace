@@ -12,7 +12,7 @@ def node_setup_helper(node: Node):
         namespace='',
         parameters=[
             ('verbosity', 20, ParameterDescriptor(
-                description='Verbosity log messages: UNSET. DEBUG, INFO, WARN, ERROR and FATAL in ascending order.' +
+                description='Verbosity log messages: 0 (UNSET), 10 (DEBUG), 30 (INFO), 40 (WARN), 50 (ERROR) and 60 (FATAL) in ascending order.' +
                 'a logger will only process log messages with severity at or higher than a specified level chosen for the logger.')
              )
         ]
