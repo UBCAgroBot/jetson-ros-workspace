@@ -76,9 +76,9 @@ class PostProcessorPublisher(Node):
             self.topic_seesaw,
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
-        
+
         self.subscription_center_down = self.create_subscription(
-            String, 
+            String,
             self.topic_center_down,
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
