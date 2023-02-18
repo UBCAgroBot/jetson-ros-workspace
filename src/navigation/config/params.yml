@@ -4,11 +4,17 @@
   ros__parameters:
     video: ''
     verbosity: 30
-/navigation/algorithm_publisher:
+/navigation/algorithm_publisher_seesaw:
   ros__parameters:
     alg: 'seesaw'
     mock: True
-    show: True
+    show: False
+    verbosity: 30
+/navigation/algorithm_publisher_center_downward:
+  ros__parameters:
+    alg: 'center_down'
+    mock: True
+    show: False
     verbosity: 30
 /navigation/post_processor_publisher:
   ros__parameters:

@@ -9,6 +9,7 @@ from Navigation.algorithms.MiniContoursDownwards import MiniContoursDownwards
 from Navigation.algorithms.ScanningAlgorithm import ScanningAlgorithm
 from Navigation.algorithms.SeesawAlgorithm import SeesawAlgorithm
 from Navigation.algorithms.Algorithm import Algorithm
+from Navigation.algorithms.CenterDownwards import CenterDownward
 
 import os.path as path
 from omegaconf import OmegaConf
@@ -16,7 +17,7 @@ from omegaconf import OmegaConf
 
 algo_list = [('hough', HoughAlgorithm), ('center_row', CenterRowAlgorithm), ('mini_contour', MiniContoursAlgorithm),
              ('mini_contour_downward', MiniContoursDownwards), ('scanning', ScanningAlgorithm), ('check_row_end', CheckRowEnd),
-             ('seesaw', SeesawAlgorithm)]
+             ('seesaw', SeesawAlgorithm), ('center_down', CenterDownward)]
 
 
 def get_algorithm(algorithm_name) -> Algorithm:

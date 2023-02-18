@@ -42,6 +42,7 @@ class PostProcessorPublisher(Node):
         self.topic_check_row_end = 'navigation/check_row_end'
         self.topic_hough = 'navigation/hough'
         self.topic_seesaw = 'navigation/seesaw'
+        self.topic_center_down = 'navigation/center_down'
         self.counter = 0  # track which message we are sending
         self.array_size = 10
         self.angles = np.zeros(self.array_size)
@@ -75,8 +76,13 @@ class PostProcessorPublisher(Node):
             self.topic_seesaw,
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
+        
+        self.subscription_center_down = self.create_subscription(
+            String, 
+            self.topic_center_down,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
 
-        # Commented as currently only using front facing algorrithms.
         # self.subscription_mini_contour_downward = self.create_subscription(
         #     String,
         #     self.topic_mini_contour_downward,
