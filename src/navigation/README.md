@@ -63,6 +63,7 @@ These arguments apply to all Nodes
   - `scanning`
   - `check_row_end`
   - `seesaw`
+  - `center_down`
 - Required
 
 #### `mock`
