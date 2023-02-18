@@ -1,0 +1,22 @@
+# Documentation on parameters: https://github.com/UBCAgroBot/jetson-ros-workspace/blob/main/src/navigation/README.md
+
+/navigation/mock_camera_publisher:
+  ros__parameters:
+    video: ''
+    verbosity: 30
+/navigation/algorithm_publisher_seesaw:
+  ros__parameters:
+    alg: 'seesaw'
+    mock: True
+    show: False
+    verbosity: 30
+/navigation/algorithm_publisher_center_downward:
+  ros__parameters:
+    alg: 'center_down'
+    mock: True
+    show: False
+    verbosity: 30
+/navigation/post_processor_publisher:
+  ros__parameters:
+    port: '/dev/ttyACM0'
+    verbosity: 20

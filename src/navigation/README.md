@@ -2,11 +2,11 @@
 
 ## Internal Nodes and Topics
 
-| Node                     | Description                              | Subscribed Topics         | Command Line Arguments      | Published Topics           |
-| ------------------------ | ---------------------------------------- | ------------------------- | --------------------------- | -------------------------- |
-| mock_camera_publisher    | Publishes a mock camera image stream     | -                         | video                       | navigation/mock_camera     |
-| algorithm_publisher      | Runs algorithm on image stream           | /camera/color/image_raw   | algorithm\*<br>mock<br>show | navigation/\<algorithm\>   |
-| post_processor_publisher | Runs the post processor on the algorithm | /navigation/\<algorithm\> | -                           | navigation/post_processing |
+| Node                     | Description                              | Subscribed Topics       | Command Line Arguments              | Published Topics           |
+| ------------------------ | ---------------------------------------- | ----------------------- | ----------------------------------- | -------------------------- |
+| mock_camera_publisher    | Publishes a mock camera image stream     | -                       | video<br>verbosity                  | navigation/mock_camera     |
+| algorithm_publisher      | Runs algorithm on image stream           | /camera/color/image_raw | algo\*<br>mock<br>show<br>verbosity | navigation/\<alg\>         |
+| post_processor_publisher | Runs the post processor on the algorithm | /navigation/\<alg\>     | port\*<br>verbosity                 | navigation/post_processing |
 
 To run a node, run the following command:
 
@@ -19,11 +19,27 @@ ros2 run navigation mock_camera_publisher
 You can also run the nodes with the command line arguments:
 
 ```bash
-ros2 run navigation algorithm_publisher --ros-args -p algorithm:=center_row
-ros2 run navigation algorithm_publisher --ros-args -p algorithm:=center_row -p mock:=False -p show:=True
+ros2 run navigation algorithm_publisher --ros-args -p alg:=center_row
+ros2 run navigation algorithm_publisher --ros-args -p alg:=center_row -p mock:=False -p show:=True
 ```
 
-Not passing any arguments will result in default argument values being used. Arguments marked with \* are required.
+**Not passing any arguments will result in default argument values being used. Arguments marked with \* are required.**
+
+### common arguments
+
+These arguments apply to all Nodes
+
+#### `verbosity`
+
+- Type: `int`
+- Int: The verbosity of the logger:
+  - 0: `UNSET`
+  - 10: `DEBUG`
+  - 20: `INFO`
+  - 30: `WARN`
+  - 40: `ERROR`
+  - 50: `FATAL`
+- Default: 20 `(INFO)`
 
 ### mock_camera_publisher
 
@@ -36,7 +52,7 @@ Not passing any arguments will result in default argument values being used. Arg
 
 ### algorithm_publisher
 
-#### `algorithm`
+#### `alg`
 
 - Type: `string`
 - String: The name of the algorithm to run:
@@ -46,6 +62,8 @@ Not passing any arguments will result in default argument values being used. Arg
   - `mini_contour_downward`
   - `scanning`
   - `check_row_end`
+  - `seesaw`
+  - `center_down`
 - Required
 
 #### `mock`
@@ -69,13 +87,24 @@ Not passing any arguments will result in default argument values being used. Arg
 To start the camera run:
 
 ```bash
-ros2 launch realsense2_camera rs_launch.py
+ros2 launch realsense2_camera rs_launch.py device_type:=d455 initial_reset:=true
 ```
 
 The image stream is published to multiple topics. We will be using `/camera/color/image_raw`.
 
 List of important links that include information on the topics and on the arguments for the launch file:
 
-- https://dev.intelrealsense.com/docs/ros-wrapper
-- https://index.ros.org/r/realsense2_camera
-- https://github.com/intel/ros2_intel_realsense
+- http://wiki.ros.org/realsense2_camera
+- https://github.com/IntelRealSense/realsense-ros#installation-instructions
+- https://github.com/IntelRealSense/realsense-ros#usage-instructions
+
+## Navigation pipeline
+
+We maintain a [ROS2 Launch file](/src/navigation/launch/navigation_launch.py) that allows us to run all Nodes in the navigation pipeline at the same time.
+
+```bash
+# run launch file
+ros2 launch navigation navigation_launch.py
+```
+
+To configure arguments for individual nodes in the pipeline edit [params.yml](/src/navigation/config/params.yml) before running `colcon build`.

@@ -5,17 +5,29 @@ from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
 import time
 import sys
+from rcl_interfaces.msg import ParameterDescriptor
+from rclpy.node import Node
 
 sys.path.append(".")
 from src.helper_scripts.arduino_control import arduino_control
+from src.helper_scripts.node_setup_helper import node_setup_helper
 
 
 class PostProcessorPublisher(Node):
 
     def __init__(self):
         super().__init__('post_processing_publisher')
+        node_setup_helper(self)
+        self.declare_parameters(
+            namespace='',
+            parameters=[
+                ('port', '', ParameterDescriptor(description='Port name for Arduino')),
+            ]
+        )
+        self.ARDUINO_PORT = self.get_parameter('port').value
+        if self.ARDUINO_PORT == '':
+            raise ValueError("Port is not defined. Please set the 'port' parameter")
 
-        self.ARDUINO_PORT = "/dev/ttyACM0"
         self.SEND_TIME_CONSTANT = 0.5
         self.LEFT_THRESHOLD = -10
         self.RIGHT_THRESHOLD = 10
@@ -30,6 +42,7 @@ class PostProcessorPublisher(Node):
         self.topic_check_row_end = 'navigation/check_row_end'
         self.topic_hough = 'navigation/hough'
         self.topic_seesaw = 'navigation/seesaw'
+        self.topic_center_down = 'navigation/center_down'
         self.counter = 0  # track which message we are sending
         self.array_size = 10
         self.angles = np.zeros(self.array_size)
@@ -46,24 +59,11 @@ class PostProcessorPublisher(Node):
             self.listener_callback,
             qos_profile_sensor_data)
 
-        # Commented as currently only using front facing algorrithms.
-        # self.subscription_mini_contour_downward = self.create_subscription(
-        #     String,
-        #     self.topic_mini_contour_downward,
-        #     self.listener_callback,
-        #     qos_profile_sensor_data)
-
         self.subscription_hough = self.create_subscription(
             String,
             self.topic_hough,
             self.listener_callback,
             qos_profile_sensor_data)
-
-        # self.subscription_check_row_end = self.create_subscription(
-        #     String,
-        #     self.topic_check_row_end,
-        #     self.listener_callback,
-        #     qos_profile_sensor_data)
 
         self.subscription_center_row = self.create_subscription(
             String,
@@ -77,13 +77,23 @@ class PostProcessorPublisher(Node):
             self.listener_callback,  # instead of callback, look for wait to get information
             qos_profile_sensor_data)
 
-        # prevent unused variable warnings
-        self.subscription_center_row
-        # self.subscription_check_row_end
-        self.subscription_hough
-        self.subscription_mini_contour
-        # self.subscription_mini_contour_downward
-        self.subscription_scanning
+        self.subscription_center_down = self.create_subscription(
+            String,
+            self.topic_center_down,
+            self.listener_callback,  # instead of callback, look for wait to get information
+            qos_profile_sensor_data)
+
+        # self.subscription_mini_contour_downward = self.create_subscription(
+        #     String,
+        #     self.topic_mini_contour_downward,
+        #     self.listener_callback,
+        #     qos_profile_sensor_data)
+
+        # self.subscription_check_row_end = self.create_subscription(
+        #     String,
+        #     self.topic_check_row_end,
+        #     self.listener_callback,
+        #     qos_profile_sensor_data)
 
     def listener_callback(self, in_msg: String):
         # Used in debugging angles stored for avg calculation
@@ -97,25 +107,21 @@ class PostProcessorPublisher(Node):
         current_time = time.time()
         if (current_time > self.last_send_time + self.SEND_TIME_CONSTANT):
             self.last_send_time = time.time()
-            print("out_angle on post processor node:", out_angle)
+            turn = ''
             if out_angle < self.LEFT_THRESHOLD:
-                self.arduino_controller.send(move="F", turn="R")
+                turn = 'R'
             elif out_angle > self.RIGHT_THRESHOLD:
-                self.arduino_controller.send(move="F", turn="L")
+                turn = 'L'
             else:
-                self.arduino_controller.send(move="F", turn="S")
+                turn = 'S'
+            self.get_logger().info(f'direction: (F, {turn}), angle: {out_angle}')
+            self.arduino_controller.send(move="F", turn=turn)
 
 
 def main(args=None):
     rclpy.init(args=args)
-
     post_processor_publisher = PostProcessorPublisher()
-
     rclpy.spin(post_processor_publisher)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     post_processor_publisher.destroy_node()
     rclpy.shutdown()
 

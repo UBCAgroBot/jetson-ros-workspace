@@ -10,23 +10,28 @@ from std_msgs.msg import String
 
 sys.path.append(".")
 from src.helper_scripts.get_algorithm import get_algorithm
+from src.helper_scripts.node_setup_helper import node_setup_helper
 
 
 class AlgorithmPublisher(Node):
 
     def __init__(self, image_topic='/camera/color/image_raw'):
         super().__init__('algorithm_publisher')
-        self.declare_parameter('mock', False, ParameterDescriptor(
-            description='Sets image_topic to the mock camera topic'))
+        node_setup_helper(self)
+        self.declare_parameters(
+            namespace='',
+            parameters=[
+                ('mock', False, ParameterDescriptor(description='Sets image_topic to the mock camera topic')),
+                ('show', True, ParameterDescriptor(description='Sets whether or not process_frame will show frames')),
+                ('alg', '', ParameterDescriptor(description='Name of algorithm to use'))
+            ]
+        )
         self.is_mock_feed = self.get_parameter('mock').value
-        self.declare_parameter('show', True, ParameterDescriptor(
-            description='Sets whether or not process_frame will show frames'))
         self.show = self.get_parameter('show').value
-        self.declare_parameter('algorithm', '', ParameterDescriptor(description='Name of algorithm to use'))
-        self.algorithm_name = self.get_parameter('algorithm').value
+        self.algorithm_name = self.get_parameter('alg').value
 
         if self.algorithm_name == '':
-            raise ValueError("Algorithm is not defined. Please set the 'algorithm' parameter")
+            raise ValueError("Algorithm is not defined. Please set the 'alg parameter")
 
         # if 'mock' command line argument is true, we will use the mock camera publisher topic
         self.topic = 'navigation/mock_camera' if self.is_mock_feed else image_topic
@@ -58,7 +63,7 @@ class AlgorithmPublisher(Node):
         msg = String()
         msg.data = str(angle)
         self.publisher.publish(msg)
-        self.get_logger().info(f'Publishing angle: {angle}')
+        self.get_logger().info(f'angle: {angle}')
         self.display_frame('output', processed_frame)
 
 
