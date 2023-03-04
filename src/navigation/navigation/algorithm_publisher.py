@@ -1,5 +1,6 @@
-import cv2 as cv
 import sys
+
+import cv2 as cv
 import rclpy
 from cv_bridge import CvBridge
 from rcl_interfaces.msg import ParameterDescriptor
@@ -12,6 +13,10 @@ sys.path.append(".")
 from src.helper_scripts.get_algorithm import get_algorithm
 from src.helper_scripts.node_setup_helper import node_setup_helper
 
+sys.path.append("./Navigation/")
+from Navigation.gui import startGUI
+
+global appGUI
 
 class AlgorithmPublisher(Node):
 
@@ -59,18 +64,34 @@ class AlgorithmPublisher(Node):
     def listener_callback(self, data):
         current_frame = self.br.imgmsg_to_cv2(data, self.encoding)
         self.display_frame('input', current_frame)
-        processed_frame, angle = self.algorithm.process_frame(current_frame, show=self.show)
+        
+        if appGUI.isActive():
+            appGUI.update_dict({'standard': frame})
+            self.algorithm.update_lower_hsv(appGUI.getLowerHSV())
+            self.algorithm.update_upper_hsv(appGUI.getUpperHSV())
+            processed, angle, maskf = self.algorithm.get_extra_content(
+            frame, show=True)
+            frame = appGUI.apply_filter(frame)
+            appGUI.update_dict({'processed': processed})
+            appGUI.update_dict({'masked': maskf})
+            appGUI.update_fps(-1)
+            appGUI.render_image()
+        # processed_frame, angle = self.algorithm.process_frame(current_frame, show=self.show)
+
         msg = String()
         msg.data = str(angle)
         self.publisher.publish(msg)
         self.get_logger().info(f'angle: {angle}')
-        self.display_frame('output', processed_frame)
+        self.display_frame('output', processed)
 
 
 def main(args=None):
     rclpy.init(args=args)
     check_row_end_publisher = AlgorithmPublisher()
     rclpy.spin(check_row_end_publisher)
+
+    global appGUI
+    appGUI = startGUI('name', name1="standard", name2="processed")
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
