@@ -16,8 +16,6 @@ from src.helper_scripts.node_setup_helper import node_setup_helper
 sys.path.append("./Navigation/")
 from Navigation.gui import startGUI
 
-global appGUI
-
 class AlgorithmPublisher(Node):
 
     def __init__(self, image_topic='/camera/color/image_raw'):
@@ -50,6 +48,7 @@ class AlgorithmPublisher(Node):
         self.subscription  # prevent unused variable warning
         self.publisher = self.create_publisher(String, f'navigation/{self.algorithm_name}', 10)
         self.br = CvBridge()
+        self.appGUI = startGUI('name', name1="standard", name2="processed", name3="masked")
         try:
             self.algorithm = get_algorithm(self.algorithm_name)
         except ValueError as err:
@@ -65,16 +64,15 @@ class AlgorithmPublisher(Node):
         current_frame = self.br.imgmsg_to_cv2(data, self.encoding)
         self.display_frame('input', current_frame)
         
-        if appGUI.isActive():
-            appGUI.update_dict({'standard': current_frame})
-            self.algorithm.update_lower_hsv(appGUI.getLowerHSV())
-            self.algorithm.update_upper_hsv(appGUI.getUpperHSV())
-            processed, angle = self.algorithm.get_extra_content(
-            current_frame, show=True)
-            current_frame = appGUI.apply_filter(current_frame)
-            appGUI.update_dict({'processed': processed})
-            appGUI.update_fps(-1)
-            appGUI.render_image()
+        if self.appGUI.isActive():
+            self.appGUI.update_dict({'standard': current_frame.copy()})
+            self.algorithm.update_lower_hsv(self.appGUI.getLowerHSV())
+            self.algorithm.update_upper_hsv(self.appGUI.getUpperHSV())
+            processed, angle, mask = self.algorithm.get_extra_content(current_frame, show=True)
+            self.appGUI.update_dict({'processed': processed})
+            self.appGUI.update_dict({'masked': mask})
+            self.appGUI.update_fps(-1)
+            self.appGUI.render_image()
         # processed_frame, angle = self.algorithm.process_frame(current_frame, show=self.show)
 
         msg = String()
@@ -88,9 +86,6 @@ def main(args=None):
     rclpy.init(args=args)
     check_row_end_publisher = AlgorithmPublisher()
     rclpy.spin(check_row_end_publisher)
-
-    global appGUI
-    appGUI = startGUI('name', name1="standard", name2="processed")
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

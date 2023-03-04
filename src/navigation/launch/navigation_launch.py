@@ -24,13 +24,13 @@ def generate_launch_description():
             name='algorithm_publisher_seesaw',
             parameters=[config]
         ),
-        Node(
-            package='navigation',
-            executable='algorithm_publisher',
-            namespace='navigation',
-            name='algorithm_publisher_center_downward',
-            parameters=[config]
-        ),
+        # Node(
+        #     package='navigation',
+        #     executable='algorithm_publisher',
+        #     namespace='navigation',
+        #     name='algorithm_publisher_center_downward',
+        #     parameters=[config]
+        # ),
         Node(
             package='navigation',
             executable='post_processor_publisher',
