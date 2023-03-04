@@ -66,14 +66,13 @@ class AlgorithmPublisher(Node):
         self.display_frame('input', current_frame)
         
         if appGUI.isActive():
-            appGUI.update_dict({'standard': frame})
+            appGUI.update_dict({'standard': current_frame})
             self.algorithm.update_lower_hsv(appGUI.getLowerHSV())
             self.algorithm.update_upper_hsv(appGUI.getUpperHSV())
-            processed, angle, maskf = self.algorithm.get_extra_content(
-            frame, show=True)
-            frame = appGUI.apply_filter(frame)
+            processed, angle = self.algorithm.get_extra_content(
+            current_frame, show=True)
+            current_frame = appGUI.apply_filter(current_frame)
             appGUI.update_dict({'processed': processed})
-            appGUI.update_dict({'masked': maskf})
             appGUI.update_fps(-1)
             appGUI.render_image()
         # processed_frame, angle = self.algorithm.process_frame(current_frame, show=self.show)
