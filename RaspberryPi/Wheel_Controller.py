@@ -125,41 +125,6 @@ def generate_pwm(speed):
   for pwmc in pwm_control:
     pwmc.ChangeDutyCycle(speed / PWM_MAX_SPEED)
 
-
-# update direction enums
-# returns true if input is a valid value, 
-# othwerise returns false
-int update_dir_enums(String input) {
-  switch (input.charAt(0)) {
-    case 'H':
-      halt();
-      break;
-    case 'F':
-      set_forward();
-      break;
-    case 'B':
-      set_backward();
-      break;
-    default:
-      return false;
-  }
-      
-  switch (input.charAt(1)) {
-    case 'L':
-      set_left();
-      break;
-    case 'S':
-      reset_angle();
-      break;
-    case 'R':
-      set_right();
-      break;
-    default:
-      return false;
-  }
-  return true;
-}
-
 def read_serial():
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
     ser.reset_input_buffer()
