@@ -1,5 +1,8 @@
 import serial
 from typing import Enum
+from gpiozero import PWMLED, LED, OutputDevice
+from time import sleep
+
 
 #  PWM: Analog
 #  DIR: Digital
@@ -86,23 +89,35 @@ def setup():
     ser.flushOutput()
 
     # setup pin modes
-    pinMode(GFL_DIR, "OUTPUT")
-    pinMode(GFL_PWM, "OUTPUT")
+    gfl_dir_pin = OutputDevice(GFL_DIR)
+    gfl_dir_pin.source = None
+    gfl_pwm_pin = OutputDevice(GFL_PWM)
+    gfl_pwm_pin.source = None
 
-    pinMode(GFR_DIR, "OUTPUT")
-    pinMode(GFR_PWM, "OUTPUT")
+    gfr_dir_pin = OutputDevice(GFR_DIR)
+    gfr_dir_pin.source = None
+    gfr_pwm_pin = OutputDevice(GFR_PWM)
+    gfr_pwm_pin.source = None
 
-    pinMode(GBL_DIR, "OUTPUT")
-    pinMode(GBL_PWM, "OUTPUT")
+    gbl_dir_pin = OutputDevice(GBL_DIR)
+    gbl_dir_pin.source = None
+    gbl_pwm_pin = OutputDevice(GBL_PWM)
+    gbl_pwm_pin.source = None
 
-    pinMode(GBR_DIR, "OUTPUT")
-    pinMode(GBR_PWM, "OUTPUT")
+    gbr_dir_pin = OutputDevice(GBR_DIR)
+    gbr_dir_pin.source = None
+    gbr_pwm_pin = OutputDevice(GBR_PWM)
+    gbr_pwm_pin.source = None
 
-    pinMode(SL_DIR, "OUTPUT")
-    pinMode(SL_PULSE, "OUTPUT")
+    sl_dir_pin = OutputDevice(SL_DIR)
+    sl_dir_pin.source = None
+    sl_pulse_pin = OutputDevice(SL_PULSE)
+    sl_pulse_pin.source = None
 
-    pinMode(SR_DIR, "OUTPUT")
-    pinMode(SR_PULSE, "OUTPUT")
+    sr_dir_pin = OutputDevice(SR_DIR)
+    sr_dir_pin.source = None
+    sr_pulse_pin = OutputDevice(SR_PULSE)
+    sr_pulse_pin.source = None
 
 
 def loop():
@@ -230,8 +245,11 @@ def run():
 # Turns stepper motor in desired direction
 def turn_wheels(dir):
     # Set direction of stepper motors
-    digitalWrite(SL_DIR, dir)
-    digitalWrite(SR_DIR, dir)
+    sl_pin = LED(SL_DIR)
+    sr_pin = LED(SR_DIR)
+
+    sl_pin.value = dir
+    sr_pin.value = dir
 
     # Generate pulse
     generate_pulse()
@@ -239,22 +257,40 @@ def turn_wheels(dir):
 
 # Generates pulse for stepper motors
 def generate_pulse():
-    digitalWrite(SL_PULSE, HIGH)
-    digitalWrite(SR_PULSE, HIGH)
-    delay(ANGULAR_SPEED)
-    digitalWrite(SL_PULSE, LOW)
-    digitalWrite(SR_PULSE, LOW)
-    delay(ANGULAR_SPEED)
+    sl_pin = LED(SL_PULSE)
+    sr_pin = LED(SR_PULSE)
+
+    sl_pin.on()
+    sr_pin.on()
+
+    sleep(ANGULAR_SPEED)
+
+    sl_pin.off()
+    sr_pin.off()
+
+    sleep(ANGULAR_SPEED)
 
 
 # Turns gearbox motor in desired direction
 def rotate_wheels(dir):
     # Set direction of gearbox motors
     # The motors on the right side are flipped, hence not dir
-    digitalWrite(GFL_DIR, dir)
-    digitalWrite(GFR_DIR, not dir)
-    digitalWrite(GBL_DIR, dir)
-    digitalWrite(GBR_DIR, not dir)
+    
+    # GFL_DIR
+    gfl_pin = LED(GFL_DIR)
+    gfl_pin.value = dir
+
+    # GFR_DIR
+    gfr_pin = LED(GFR_DIR)
+    gfr_pin.value = not dir
+
+    # GBL_DIR
+    gbl_pin = LED(GBL_DIR)
+    gbl_pin.value = dir
+
+    # GBR_DIR
+    gbr_pin = LED(GBR_DIR)
+    gbr_pin.value = not dir
 
     # Generate PWM
     generate_pwm(PWM_SPEED)
@@ -262,7 +298,19 @@ def rotate_wheels(dir):
 
 # generate pwm for gearbox motors
 def generate_pwm(spd):
-    analogWrite(GFL_PWM, spd)
-    analogWrite(GFR_PWM, spd)
-    analogWrite(GBL_PWM, spd)
-    analogWrite(GBR_PWM, spd)
+
+    # GFL_PWM
+    gfl_pin = PWMLED(GFL_PWM)
+    gfl_pin.value = spd
+
+    # GFR_PWM
+    gfr_pin = PWMLED(GFR_PWM)
+    gfr_pin.value = spd
+
+    # GBL_PWM
+    gbl_pin = PWMLED(GBL_PWM)
+    gbl_pin.value = spd
+
+    # GBR_PWM
+    gbr_pin = LED(GBR_PWM)
+    gbr_pin.value = spd
