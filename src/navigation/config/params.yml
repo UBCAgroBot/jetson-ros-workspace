@@ -7,8 +7,8 @@
 /navigation/algorithm_publisher_seesaw:
   ros__parameters:
     alg: 'seesaw'
-    mock: True
-    show: False
+    mock: False
+    show: True
     verbosity: 30
 /navigation/algorithm_publisher_center_downward:
   ros__parameters:

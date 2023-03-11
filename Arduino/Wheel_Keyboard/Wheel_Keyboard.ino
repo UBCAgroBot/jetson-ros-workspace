@@ -15,17 +15,17 @@
 // B: Back
 // L: Left
 // R: Right
-const int GFL_DIR = 30;
-const int GFL_PWM = 10;
+const int GFL_DIR = 22;
+const int GFL_PWM = 7;
 
-const int GFR_DIR = 42;
-const int GFR_PWM = 11;
+const int GFR_DIR = 24;
+const int GFR_PWM = 6;
 
-const int GBL_DIR = 32;
-const int GBL_PWM = 8;
+const int GBL_DIR = 26;
+const int GBL_PWM = 5;
 
-const int GBR_DIR = 26;
-const int GBR_PWM = 9;
+const int GBR_DIR = 28;
+const int GBR_PWM = 4;
 
 const int SL_DIR = 48;
 const int SL_PULSE = 50;
@@ -76,7 +76,7 @@ const int PWM_SPEED = 100;
 const float REV_ANGLE = 360.0 / 400.0;
 
 // max turning angle
-const float MAX_ANGLE = 90.0;
+const float MAX_ANGLE = 45.0;
 
 // enum for vertical directions
 enum v_directions {
@@ -211,46 +211,46 @@ void reset_angle() {
 
   // TODO: investigate error with this line
   // Serial.println("Straight");
-  Serial.println("Reseting angle");
+  //Serial.println("Reseting angle");
   const float turn_angle = abs(current_angle) / REV_ANGLE;
   for (int i = 0; i < turn_angle; i++) {
     turn_wheels(dir);
     current_angle += inc_value;
   }
-  Serial.println("Reset complete");
+  //Serial.println("Reset complete");
 }
 
 // halt any actions
 void halt() {
   movement_dir = halted;
-  Serial.println("Halt");
+  //Serial.println("Halt");
 }
 
 // manipulate motors based on angular_dir and movement_dir values
 void run() {
   if (angular_dir == left) {
     if (current_angle <= -MAX_ANGLE) {
-      Serial.println("Max angle reached");
+      //Serial.println("Max angle reached");
     } else {
-      Serial.println("Turning left");
+      //Serial.println("Turning left");
       current_angle -= REV_ANGLE;
       turn_wheels(DIR_LEFT);
     }
   } else if (angular_dir == right) {
     if (current_angle >= MAX_ANGLE) {
-      Serial.println("Max angle reached");
+      //Serial.println("Max angle reached");
     } else {
-      Serial.println("Turning right");
+      //Serial.println("Turning right");
       current_angle += REV_ANGLE;
       turn_wheels(DIR_RIGHT);
     }
   }
 
   if (movement_dir == forward) {
-    Serial.println("Moving forward");
+    //Serial.println("Moving forward");
     rotate_wheels(DIR_FORWARD);
   } else if (movement_dir == backward) {
-    Serial.println("Moving backward");
+    //Serial.println("Moving backward");
     rotate_wheels(DIR_BACKWARD);
   }
 
