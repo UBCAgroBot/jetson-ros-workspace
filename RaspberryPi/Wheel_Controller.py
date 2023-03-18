@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 import serial
 from enum import Enum
-from pynput import keyboard
+import pynput.keyboard as kb
 
 SERIAL_PORT = '/dev/ttyAMA0'
 
@@ -186,12 +186,12 @@ def setup_keyboard():
               movement_arr[1] = H_Directions.straight
       except AttributeError:
           print(f'special key {key} released')
-          if key == keyboard.Key.esc:
+          if key == kb.Key.esc:
               # Stop listener
               return False
 
   # Start the keyboard listener in a non-blocking manner
-  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+  listener = kb.Listener(on_press=on_press, on_release=on_release)
 
   listener.start()
 
