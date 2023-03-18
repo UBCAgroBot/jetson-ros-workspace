@@ -197,35 +197,37 @@ def setup_keyboard():
   listener.start()
 
 def run(cmd):
-  movement, turning = cmd[0], cmd[1]
-  print(movement, turning)
-  if turning == H_Directions.left:
-      if current_angle <= -MAX_ANGLE:
-          print("Max angle reached")
-      else:
-          print("Turning left")
-          current_angle -= REV_ANGLE
-          turn_wheels(DIR_LEFT)
-  elif turning == H_Directions.right:
-      if current_angle >= MAX_ANGLE:
-          print("Max angle reached")
-      else:
-          print("Turning right")
-          current_angle += REV_ANGLE
-          turn_wheels(DIR_RIGHT)
+  print(cmd)
 
-  if movement_dir == V_Directions.forward:
-      print("Moving forward")
-      rotate_wheels(DIR_FORWARD)
-  elif movement_dir == V_Directions.backward:
-      print("Moving backward")
-      rotate_wheels(DIR_BACKWARD)
-
-  # Stop PWM
-  if movement_dir == V_Directions.halted:
-      generate_pwm(0)
+  try:
+      if cmd.char == "w":
+        print("Moving forward")
+        rotate_wheels(DIR_FORWARD)
+      elif cmd.char == "s":
+        print("Moving backward")
+        rotate_wheels(DIR_BACKWARD)
+      elif cmd.char == "a":
+        if current_angle <= -MAX_ANGLE:
+            print("Max angle reached")
+        else:
+            print("Turning left")
+            current_angle -= REV_ANGLE
+            turn_wheels(DIR_LEFT)
+      elif cmd.char == "d":
+        if current_angle >= MAX_ANGLE:
+            print("Max angle reached")
+        else:
+            print("Turning right")
+            current_angle += REV_ANGLE
+            turn_wheels(DIR_RIGHT)
+      else: 
+        generate_pwm(0)
+        
+  except AttributeError:
+      print(f'special key {cmd} pressed')
 
 import tty, sys, termios
+
 
 def main():
   setup()
@@ -234,14 +236,11 @@ def main():
   tty.setcbreak(sys.stdin)
   x = 0
   while 1:
-    x=sys.stdin.read(1)[0]
-    print("You pressed", x)
-    if x == "r":
-      print("If condition is met")
+    cmd=sys.stdin.read(1)[0]
+    run(cmd)
   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
 
   while True:
-    run(movement_arr)
     pass
 
 main()
