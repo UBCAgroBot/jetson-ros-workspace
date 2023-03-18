@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 import serial
 from enum import Enum
-# from pynput import keyboard
+from pynput import keyboard
 
 
 SERIAL_PORT = '/dev/ttyAMA0'
@@ -196,9 +196,48 @@ def run(cmd):
 
 import tty, sys, termios
 
+send_str_arr = []
+
+### testing with keyboard
+def setup_keyboard():
+  def on_press(key):
+      try:
+          if key.char == "w":
+              send_str_arr[0] = "F"
+          elif key.char == "s":
+              send_str_arr[0] = "B"
+          elif key.char == "a":
+              send_str_arr[1] = "L"
+          elif key.char == "d":
+              send_str_arr[1] = "R"
+      except AttributeError:
+          print(f'special key {key} pressed', 2)
+
+  def on_release(key):
+      try:
+          if key.char == "w":
+              send_str_arr[0] = "H"
+          elif key.char == "s":
+              send_str_arr[0] = "H"
+          elif key.char == "a":
+              send_str_arr[1] = "S"
+          elif key.char == "d":
+              send_str_arr[1] = "S"
+          print(f'{key} released', 2)
+      except AttributeError:
+          if key == keyboard.Key.esc:
+              # Stop listener
+              return False
+
+  # Start the keyboard listener in a non-blocking manner
+  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+
+  listener.start()
+
 
 def main():
   setup()
+  setup_keyboard()
   filedescriptors = termios.tcgetattr(sys.stdin)
   tty.setcbreak(sys.stdin)
   while 1:
