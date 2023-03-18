@@ -160,6 +160,8 @@ def read_serial():
 
 def run(cmd):
   print(cmd)
+
+  print("angle ", current_angle)
   global current_angle
   try:
       if cmd == "w":
@@ -202,5 +204,6 @@ def main():
     if run(cmd) == "break":
        break
   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
+  print("angle ", current_angle)
 
 main()
