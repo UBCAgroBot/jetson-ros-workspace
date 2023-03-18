@@ -146,7 +146,7 @@ def rotate_wheels(direction):
 
 ## generate pwm for gearbox motors
 def generate_pwm(speed):
-  for pwmc in pwm_control:
+  for pwmc in pwm_controls:
     pwmc.ChangeDutyCycle(speed / PWM_MAX_SPEED)
 
 def read_serial():
