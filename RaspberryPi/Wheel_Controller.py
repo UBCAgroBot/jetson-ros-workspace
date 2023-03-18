@@ -160,15 +160,16 @@ def read_serial():
 
 def run(cmd):
   print(cmd)
+  print("speed ", PWM_SPEED)
   global current_angle, PWM_SPEED
   try:
       if cmd == "w":
         print("Moving forward")
-        PWM_SPEED = max(PWM_SPEED + 10, PWM_MAX_SPEED)
+        PWM_SPEED = min(PWM_SPEED + 10, PWM_MAX_SPEED)
         rotate_wheels(DIR_FORWARD)
       elif cmd == "s":
         print("Moving backward")
-        PWM_SPEED = min(PWM_SPEED - 10, 0)
+        PWM_SPEED = max(PWM_SPEED - 10, 0)
         rotate_wheels(DIR_BACKWARD)
       elif cmd == "a":
         if current_angle <= -MAX_ANGLE:
