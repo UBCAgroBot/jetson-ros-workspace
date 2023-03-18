@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 import serial
 from enum import Enum
-from pynput import keyboard
+# from pynput import keyboard
 
 
 SERIAL_PORT = '/dev/ttyAMA0'
@@ -225,10 +225,21 @@ def run(cmd):
   if movement_dir == V_Directions.halted:
       generate_pwm(0)
 
+import tty, sys, termios
 
 def main():
   setup()
-  setup_keyboard()
+  # setup_keyboard()
+  filedescriptors = termios.tcgetattr(sys.stdin)
+  tty.setcbreak(sys.stdin)
+  x = 0
+  while 1:
+    x=sys.stdin.read(1)[0]
+    print("You pressed", x)
+    if x == "r":
+      print("If condition is met")
+  termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
+
   while True:
     run(movement_arr)
     pass
