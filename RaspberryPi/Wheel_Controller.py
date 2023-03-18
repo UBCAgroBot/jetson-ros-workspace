@@ -200,20 +200,20 @@ def run(cmd):
   print(cmd)
 
   try:
-      if cmd.char == "w":
+      if cmd == "w":
         print("Moving forward")
         rotate_wheels(DIR_FORWARD)
-      elif cmd.char == "s":
+      elif cmd == "s":
         print("Moving backward")
         rotate_wheels(DIR_BACKWARD)
-      elif cmd.char == "a":
+      elif cmd == "a":
         if current_angle <= -MAX_ANGLE:
             print("Max angle reached")
         else:
             print("Turning left")
             current_angle -= REV_ANGLE
             turn_wheels(DIR_LEFT)
-      elif cmd.char == "d":
+      elif cmd == "d":
         if current_angle >= MAX_ANGLE:
             print("Max angle reached")
         else:
