@@ -227,8 +227,8 @@ def run(cmd):
 
 def main():
   setup()
+  setup_keyboard()
   while True:
-    setup_keyboard()
     run(movement_arr)
     pass
 
