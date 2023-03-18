@@ -159,9 +159,9 @@ def read_serial():
         return line
 
 def run(cmd):
+  global current_angle, PWM_SPEED
   print(cmd)
   print("speed ", PWM_SPEED)
-  global current_angle, PWM_SPEED
   try:
       if cmd == "w":
         print("Moving forward")
