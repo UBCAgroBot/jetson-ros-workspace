@@ -157,44 +157,6 @@ def read_serial():
         line = ser.readline().decode('utf-8').rstrip()
         print(line)
         return line
-      
-
-movement_arr = ['H', 'S']
-### testing with keyboard
-def setup_keyboard():
-  def on_press(key):
-      try:
-          if key.char == "w":
-              movement_arr[0] = V_Directions.forward
-          elif key.char == "s":
-              movement_arr[0] = V_Directions.backward
-          elif key.char == "a":
-              movement_arr[1] = H_Directions.left
-          elif key.char == "d":
-              movement_arr[1] = H_Directions.right
-      except AttributeError:
-          print(f'special key {key} pressed')
-
-  def on_release(key):
-      try:
-          if key.char == "w":
-              movement_arr[0] = V_Directions.halted
-          elif key.char == "s":
-              movement_arr[0] = V_Directions.halted
-          elif key.char == "a":
-              movement_arr[1] = H_Directions.straight
-          elif key.char == "d":
-              movement_arr[1] = H_Directions.straight
-      except AttributeError:
-          print(f'special key {key} released')
-          if key == keyboard.Key.esc:
-              # Stop listener
-              return False
-
-  # Start the keyboard listener in a non-blocking manner
-  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-
-  listener.start()
 
 def run(cmd):
   print(cmd)
@@ -220,6 +182,8 @@ def run(cmd):
             print("Turning right")
             current_angle += REV_ANGLE
             turn_wheels(DIR_RIGHT)
+      elif cmd == "q":
+        return False
       else: 
         generate_pwm(0)
         
@@ -231,16 +195,13 @@ import tty, sys, termios
 
 def main():
   setup()
-  # setup_keyboard()
   filedescriptors = termios.tcgetattr(sys.stdin)
   tty.setcbreak(sys.stdin)
   x = 0
   while 1:
     cmd=sys.stdin.read(1)[0]
-    run(cmd)
+    if not run(cmd):
+       break
   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
-
-  while True:
-    pass
 
 main()
