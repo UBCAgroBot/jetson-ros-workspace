@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="image_rec" exec="testpublisher" name="testpublisher" output="screen"/>
+    <node pkg="image_rec" exec="preprocessor" name="pre_processor"/>
+    <node pkg="image_rec" exec="frcnn" name="frcnn" output="screen"/>
+    <node pkg="image_rec" exec="test_imgpost" name="test_imgpost" output="screen"/>
+
+</launch>

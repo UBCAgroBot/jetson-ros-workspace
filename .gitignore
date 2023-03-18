@@ -31,3 +31,7 @@ AMENT_IGNORE
 # ignore IDE files
 .idea/
 .vscode/
+
+# testing files for the image_rec package
+src/image_rec/image_rec/test_imgpost.py
+src/image_rec/image_rec/test_imgsrc.py
