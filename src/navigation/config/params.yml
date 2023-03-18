@@ -2,7 +2,7 @@
 
 /navigation/mock_camera_publisher:
   ros__parameters:
-    video: ''
+    video: 'topdown'
     verbosity: 30
 /navigation/algorithm_publisher_seesaw:
   ros__parameters:

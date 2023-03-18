@@ -31,11 +31,11 @@ def generate_launch_description():
         #     name='algorithm_publisher_center_downward',
         #     parameters=[config]
         # ),
-        Node(
-            package='navigation',
-            executable='post_processor_publisher',
-            namespace='navigation',
-            name='post_processor_publisher',
-            parameters=[config]
-        )
+        #Node(
+        #    package='navigation',
+        #    executable='post_processor_publisher',
+        #    namespace='navigation',
+        #    name='post_processor_publisher',
+        #    parameters=[config]
+        #)
     ])
