@@ -160,14 +160,15 @@ def read_serial():
 
 def run(cmd):
   print(cmd)
-  global current_angle
-  print("angle ", current_angle)
+  global current_angle, PWM_SPEED
   try:
       if cmd == "w":
         print("Moving forward")
+        PWM_SPEED = max(PWM_SPEED + 10, PWM_MAX_SPEED)
         rotate_wheels(DIR_FORWARD)
       elif cmd == "s":
         print("Moving backward")
+        PWM_SPEED = min(PWM_SPEED - 10, 0)
         rotate_wheels(DIR_BACKWARD)
       elif cmd == "a":
         if current_angle <= -MAX_ANGLE:
@@ -187,7 +188,8 @@ def run(cmd):
         return "break"
       else: 
         generate_pwm(0)
-        
+
+      print("angle ", current_angle)
   except AttributeError:
       print(f'special key {cmd} pressed')
 
