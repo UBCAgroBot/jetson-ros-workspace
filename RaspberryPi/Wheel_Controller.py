@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import serial
+from enum import Enum
 from pynput import keyboard
 
 SERIAL_PORT = '/dev/ttyAMA0'
@@ -27,6 +28,27 @@ REV_ANGLE = 360.0 / 400.0;
 
 # max turning angle
 MAX_ANGLE = 90.0;
+
+# enum for vertical directions
+class V_Directions(Enum):
+    halted = 0
+    forward = 1
+    backward = 2
+
+# enum for horizontal directions
+class H_Directions(Enum):
+    straight = 0
+    left = 1
+    right = 2
+
+# variable for stepper direction [left, right]
+angular_dir = H_Directions.straight
+
+# variable for gearbox direction [forward, backward]
+movement_dir = V_Directions.halted
+
+# current_angle of stepper motor
+current_angle = 0.0
 
 '''HARDWARD PWM'''
 # from rpi_hardware_pwm import HardwarePWM
@@ -142,26 +164,26 @@ def setup_keyboard():
   def on_press(key):
       try:
           if key.char == "w":
-              movement_arr[0] = "F"
+              movement_arr[0] = V_Directions.forward
           elif key.char == "s":
-              movement_arr[0] = "B"
+              movement_arr[0] = V_Directions.backward
           elif key.char == "a":
-              movement_arr[1] = "L"
+              movement_arr[1] = H_Directions.left
           elif key.char == "d":
-              movement_arr[1] = "R"
+              movement_arr[1] = H_Directions.right
       except AttributeError:
           print(f'special key {key} pressed')
 
   def on_release(key):
       try:
           if key.char == "w":
-              movement_arr[0] = "H"
+              movement_arr[0] = V_Directions.halted
           elif key.char == "s":
-              movement_arr[0] = "H"
+              movement_arr[0] = V_Directions.halted
           elif key.char == "a":
-              movement_arr[1] = "S"
+              movement_arr[1] = H_Directions.straight
           elif key.char == "d":
-              movement_arr[1] = "S"
+              movement_arr[1] = H_Directions.straight
       except AttributeError:
           print(f'special key {key} released')
           if key == keyboard.Key.esc:
@@ -172,11 +194,36 @@ def setup_keyboard():
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
   listener.start()
-      
+
 def run(cmd):
   movement, turning = cmd[0], cmd[1]
   print(movement, turning)
-  
+  if turning == H_Directions.left:
+      if current_angle <= -MAX_ANGLE:
+          print("Max angle reached")
+      else:
+          print("Turning left")
+          current_angle -= REV_ANGLE
+          turn_wheels(DIR_LEFT)
+  elif turning == H_Directions.right:
+      if current_angle >= MAX_ANGLE:
+          print("Max angle reached")
+      else:
+          print("Turning right")
+          current_angle += REV_ANGLE
+          turn_wheels(DIR_RIGHT)
+
+  if movement_dir == V_Directions.forward:
+      print("Moving forward")
+      rotate_wheels(DIR_FORWARD)
+  elif movement_dir == V_Directions.backward:
+      print("Moving backward")
+      rotate_wheels(DIR_BACKWARD)
+
+  # Stop PWM
+  if movement_dir == V_Directions.halted:
+      generate_pwm(0)
+
 
 def main():
   setup()
