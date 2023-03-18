@@ -160,7 +160,7 @@ def read_serial():
 
 def run(cmd):
   print(cmd)
-
+  global current_angle
   try:
       if cmd == "w":
         print("Moving forward")
@@ -197,7 +197,6 @@ def main():
   setup()
   filedescriptors = termios.tcgetattr(sys.stdin)
   tty.setcbreak(sys.stdin)
-  x = 0
   while 1:
     cmd=sys.stdin.read(1)[0]
     if run(cmd) == "break":
