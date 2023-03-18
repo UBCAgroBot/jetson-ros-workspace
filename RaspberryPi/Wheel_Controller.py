@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import serial
+from pynput import keyboard
 
 SERIAL_PORT = '/dev/ttyAMA0'
 
@@ -134,15 +135,54 @@ def read_serial():
         print(line)
         return line
       
+
+movement_arr = ['H', 'S']
+### testing with keyboard
+def setup_keyboard():
+  def on_press(key):
+      try:
+          if key.char == "w":
+              movement_arr[0] = "F"
+          elif key.char == "s":
+              movement_arr[0] = "B"
+          elif key.char == "a":
+              movement_arr[1] = "L"
+          elif key.char == "d":
+              movement_arr[1] = "R"
+      except AttributeError:
+          print(f'special key {key} pressed')
+
+  def on_release(key):
+      try:
+          if key.char == "w":
+              movement_arr[0] = "H"
+          elif key.char == "s":
+              movement_arr[0] = "H"
+          elif key.char == "a":
+              movement_arr[1] = "S"
+          elif key.char == "d":
+              movement_arr[1] = "S"
+      except AttributeError:
+          print(f'special key {key} released')
+          if key == keyboard.Key.esc:
+              # Stop listener
+              return False
+
+  # Start the keyboard listener in a non-blocking manner
+  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+
+  listener.start()
+      
 def run(cmd):
   movement, turning = cmd[0], cmd[1]
   print(movement, turning)
+  
 
 def main():
   setup()
   while True:
-    cmd = read_serial()
-    run(cmd)
+    setup_keyboard()
+    run(movement_arr)
     pass
 
 main()
