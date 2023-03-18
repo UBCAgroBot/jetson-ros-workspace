@@ -183,7 +183,7 @@ def run(cmd):
             current_angle += REV_ANGLE
             turn_wheels(DIR_RIGHT)
       elif cmd == "q":
-        return False
+        return "break"
       else: 
         generate_pwm(0)
         
@@ -200,7 +200,7 @@ def main():
   x = 0
   while 1:
     cmd=sys.stdin.read(1)[0]
-    if not run(cmd):
+    if run(cmd) == "break":
        break
   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
 
