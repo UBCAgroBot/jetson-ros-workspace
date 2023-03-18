@@ -4,7 +4,7 @@ import pyfirmata
 import time
 
 # Change this!
-MYPORT = '/dev/tty.usbmodem1101'
+MYPORT = '/dev/ttyACM0'
 
 
 if __name__ == '__main__':
