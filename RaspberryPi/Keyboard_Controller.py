@@ -11,14 +11,14 @@ import serial
 
 rpi_path = '/dev/ttyACM0'
 ser = serial.Serial(
-        port=rpi_path,
-        baudrate = 9600,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-        bytesize=serial.EIGHTBITS,
-        timeout=1
+    port=rpi_path,
+    baudrate=9600,
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.EIGHTBITS,
+    timeout=1
 )
-counter=0
+counter = 0
 
 '''
 Debug flag for button press outputs and output messages
