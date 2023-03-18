@@ -2,7 +2,9 @@ import RPi.GPIO as GPIO
 from time import sleep
 import serial
 from enum import Enum
+from pynput.keyboard import Listener as kb
 from pynput import keyboard
+
 
 SERIAL_PORT = '/dev/ttyAMA0'
 
@@ -191,7 +193,7 @@ def setup_keyboard():
               return False
 
   # Start the keyboard listener in a non-blocking manner
-  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+  listener = kb(on_press=on_press, on_release=on_release)
 
   listener.start()
 
