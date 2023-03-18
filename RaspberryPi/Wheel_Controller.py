@@ -160,9 +160,8 @@ def read_serial():
 
 def run(cmd):
   print(cmd)
-
-  print("angle ", current_angle)
   global current_angle
+  print("angle ", current_angle)
   try:
       if cmd == "w":
         print("Moving forward")
