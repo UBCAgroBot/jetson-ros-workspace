@@ -16,6 +16,7 @@ DIR_BACKWARD = 0;
 
 # Angular Speed, recommended setting 7, DO NOT DECREASE TO < 3
 ANGULAR_SPEED = 7 / 1000; # python sleep uses seconds
+# ANGULAR_SPEED = 10 / 1000; # python sleep uses seconds
 
 # Strength of PWM, between 0 and 255, higher is faster
 PWM_SPEED = 100;
@@ -189,14 +190,12 @@ def run():
         if current_angle <= -MAX_ANGLE:
             print("Max angle reached")
         else:
-            print("Turning left")
             current_angle -= REV_ANGLE
             turn_wheels(DIR_LEFT)
       elif turning == H_Directions.right:
         if current_angle >= MAX_ANGLE:
             print("Max angle reached")
         else:
-            print("Turning right")
             current_angle += REV_ANGLE
             turn_wheels(DIR_RIGHT)
       else:
@@ -206,8 +205,6 @@ def run():
 
   except AttributeError:
       print("Attribute Error")
-
-  sleep(0.1)
 
 
 ### testing with keyboard
