@@ -11,8 +11,8 @@ DIR_RIGHT = 1;
 DIR_LEFT = 0;
 
 # FORWARD and BACKWARD output values for gearbox motor
-DIR_FORWARD = True;
-DIR_BACKWARD = False;
+DIR_FORWARD = 1;
+DIR_BACKWARD = 0;
 
 # Angular Speed, recommended setting 7, DO NOT DECREASE TO < 3
 ANGULAR_SPEED = 7 / 1000; # python sleep uses seconds
@@ -139,18 +139,16 @@ def generate_pulse():
 ## turns gearbox motor in desired direction
 def rotate_wheels(direction):
   GPIO.output(DFL_DIR, int(direction))
-  GPIO.output(DFR_DIR, int(not direction))
+  # GPIO.output(DFR_DIR, int(not direction))
   GPIO.output(DBL_DIR, int(direction))
-  GPIO.output(DBR_DIR, int(not direction))
+  # GPIO.output(DBR_DIR, int(not direction))
 
   generate_pwm(PWM_SPEED)
 
 ## generate pwm for gearbox motors
 def generate_pwm(speed):
   for pwmc in pwm_controls:
-    spd = (speed / PWM_MAX_SPEED)*100
-    print(spd)
-    pwmc.ChangeDutyCycle(25.1)
+    pwmc.ChangeDutyCycle((speed / PWM_MAX_SPEED)*100)
 
 # Resets the stepper motor angle to 0 degrees
 def reset_angle():
@@ -167,18 +165,20 @@ def reset_angle():
 
 def run():
   global current_angle, PWM_SPEED, movement_arr
-  print("speed ", PWM_SPEED)
+  wheel_speed = 150 # 160 / 255 == 60%
   movement, turning = movement_arr
   print(movement, turning)
   print("angle ", current_angle)
   try:
       if movement == V_Directions.forward:
         print("Moving forward")
-        PWM_SPEED = min(PWM_SPEED + 10, PWM_MAX_SPEED)
+        # PWM_SPEED = min(PWM_SPEED + 1, PWM_MAX_SPEED)
+        PWM_SPEED = wheel_speed
         rotate_wheels(DIR_FORWARD)
       elif movement == V_Directions.backward:
         print("Moving backward")
-        PWM_SPEED = max(PWM_SPEED - 10, 0)
+        # PWM_SPEED = min(PWM_SPEED + 1, PWM_MAX_SPEED)
+        PWM_SPEED = wheel_speed
         rotate_wheels(DIR_BACKWARD)
       else:
         # stop moving
@@ -206,6 +206,8 @@ def run():
 
   except AttributeError:
       print("Attribute Error")
+
+  sleep(0.1)
 
 
 ### testing with keyboard
