@@ -3,8 +3,8 @@ from time import sleep
 from enum import Enum
 from pynput import keyboard
 
-import cv2 as cv
-from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
+# import cv2 as cv
+# from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
 
 # LEFT and RIGHT output values for stepper motor
 DIR_RIGHT = 1;
@@ -50,7 +50,7 @@ movement_dir = V_Directions.halted
 # current_angle of stepper motor
 current_angle = 0.0
 
-movement_arr = (V_Directions.halted, H_Directions.straight)
+movement_arr = [V_Directions.halted, H_Directions.straight]
 
 '''HARDWARD PWM'''
 # from rpi_hardware_pwm import HardwarePWM
@@ -148,7 +148,9 @@ def rotate_wheels(direction):
 ## generate pwm for gearbox motors
 def generate_pwm(speed):
   for pwmc in pwm_controls:
-    pwmc.ChangeDutyCycle(speed / PWM_MAX_SPEED)
+    spd = (speed / PWM_MAX_SPEED)*100
+    print(spd)
+    pwmc.ChangeDutyCycle(25.1)
 
 # Resets the stepper motor angle to 0 degrees
 def reset_angle():
@@ -157,7 +159,7 @@ def reset_angle():
     inc_value = REV_ANGLE if current_angle < 0 else -REV_ANGLE
     print("Reseting angle")
 
-    turn_angle = abs(current_angle) // REV_ANGLE
+    turn_angle = int(abs(current_angle) // REV_ANGLE)
     for _ in range(turn_angle):
         turn_wheels(dir)
         current_angle += inc_value
@@ -267,6 +269,9 @@ def run_algorithm(alg, vid_file):
 def main():
   setup_rpi()
   setup_keyboard()
-  run_algorithm(Seesaw, "../Navigation/videos/down1.mp4")
+  # run_algorithm(Seesaw, "../Navigation/videos/down1.mp4")
+  while True:
+    run()
+    
 
 main()
