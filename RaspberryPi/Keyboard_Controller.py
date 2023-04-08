@@ -44,13 +44,12 @@ def run():
             turn_wheels(DIR_RIGHT)
       else:
          # reset angle
-         reset_angle(current_angle=current_angle)
+         current_angle = reset_angle(current_angle=current_angle)
 
 
   except AttributeError:
       print("Attribute Error")
 
-  sleep(0.1)
 
 
 ### testing with keyboard

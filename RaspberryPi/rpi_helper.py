@@ -44,6 +44,8 @@ def reset_angle(current_angle):
         current_angle += inc_value
     debug_print("Reset complete")
 
+    return current_angle
+
 def setup_rpi(pwm_controls):
   GPIO.setwarnings(False)			#disable warnings
   GPIO.setmode(GPIO.BOARD)		#set pin numbering system

@@ -12,7 +12,7 @@ DIR_BACKWARD = 0;
 ANGULAR_SPEED = 7 / 1000; # python sleep uses seconds
 
 # Strength of PWM, between 0 and 255, higher is faster
-PWM_SPEED = 100; # % duty cycle
+PWM_SPEED = 80; # % duty cycle
 PWM_MAX_SPEED = 100;
 PWM_FREQUENCY = 100;
 
