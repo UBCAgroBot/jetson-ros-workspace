@@ -1,93 +1,96 @@
-"""
-Listens to keyboard presses and sends a string message to the Arduino
-Output Format: "XY" where
-    X = (H = Halt, F = Forward, B = Backward)
-    Y = (S = Straight, L = Left, R = Right)
-To be used in conjunction with the StringReceiver.ino
-"""
-import time
+import RPi.GPIO as GPIO
+from time import sleep, time
 from pynput import keyboard
-import serial
+from RaspberryPi.rpi_helper import setup_rpi
+from constants import *
+from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print
 
-rpi_path = '/dev/ttyACM0'
-ser = serial.Serial(
-        port=rpi_path,
-        baudrate = 9600,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-        bytesize=serial.EIGHTBITS,
-        timeout=1
-)
-counter=0
+# import cv2 as cv
+# from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
 
-'''
-Debug flag for button press outputs and output messages
-0 = no debug(only final string printed), 1 = output message array, 2 = key presses
-'''
-debug_level = 1
+# global variables
+current_angle = 0.0
+movement_arr = [V_Directions.halted, H_Directions.straight]
+pwm_controls = []
 
+def run():
+  global current_angle, movement_arr
+  movement, turning = movement_arr
+  debug_print(movement, turning, "angle ", current_angle)
+  try:
+      if movement == V_Directions.forward:
+        debug_print("Moving forward")
+        rotate_wheels(DIR_FORWARD)
+      elif movement == V_Directions.backward:
+        debug_print("Moving backward")
+        rotate_wheels(DIR_BACKWARD)
+      else:
+        # stop moving
+        generate_pwm(0, pwm_controls=pwm_controls)
+         
 
-def debug_print(output, level=0):
-    """
-    Function that handles debug levels
-    """
-    if debug_level >= level:
-        print(output)
-
-
-# We will keep track of movement state in this array
-send_str_arr = ["H", "S"]
-
-"""
-Setup keyboard listener
-"""
-
-
-def on_press(key):
-    try:
-        debug_print(f'alphanumeric key {key.char} pressed', 2)
-        if key.char == "w":
-            send_str_arr[0] = "F"
-        elif key.char == "s":
-            send_str_arr[0] = "B"
-        elif key.char == "a":
-            send_str_arr[1] = "L"
-        elif key.char == "d":
-            send_str_arr[1] = "R"
-    except AttributeError:
-        debug_print(f'special key {key} pressed', 2)
+      if turning == H_Directions.left:
+        if current_angle <= -MAX_ANGLE:
+            debug_print("Max angle reached")
+        else:
+            debug_print("Turning left")
+            current_angle -= REV_ANGLE
+            turn_wheels(DIR_LEFT)
+      elif turning == H_Directions.right:
+        if current_angle >= MAX_ANGLE:
+            debug_print("Max angle reached")
+        else:
+            debug_print("Turning right")
+            current_angle += REV_ANGLE
+            turn_wheels(DIR_RIGHT)
+      else:
+         # reset angle
+         reset_angle()
 
 
-def on_release(key):
-    try:
-        if key.char == "w":
-            send_str_arr[0] = "H"
-        elif key.char == "s":
-            send_str_arr[0] = "H"
-        elif key.char == "a":
-            send_str_arr[1] = "S"
-        elif key.char == "d":
-            send_str_arr[1] = "S"
-        debug_print(f'{key} released', 2)
-    except AttributeError:
-        debug_print(f'special key {key} released', 2)
-        if key == keyboard.Key.esc:
-            # Stop listener
-            return False
+  except AttributeError:
+      print("Attribute Error")
+
+  sleep(0.1)
 
 
-# Start the keyboard listener in a non-blocking manner
-listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+### testing with keyboard
+def setup_keyboard():
+  def on_press(key):
+      try:
+          if key.char == "w":
+              movement_arr[0] = V_Directions.forward
+          elif key.char == "s":
+              movement_arr[0] = V_Directions.backward
+          elif key.char == "a":
+              movement_arr[1] = H_Directions.left
+          elif key.char == "d":
+              movement_arr[1] = H_Directions.right
+      except AttributeError:
+          print(f'special key {key} pressed')
 
-listener.start()
+  def on_release(key):
+      try:
+          if key.char == "w" or key.char == "s":
+              movement_arr[0] = V_Directions.halted
+          elif key.char == "a" or key.char == "d":
+              movement_arr[1] = H_Directions.straight
+          debug_print(f'{key} released')
+      except AttributeError:
+          if key == keyboard.Key.esc:
+              # Stop listener
+              return False
 
-# Run the program
-while True:
-    message = send_str_arr.copy()
-    message.append("\n")
-    debug_print("".join(message), 0)
-    message = [ord(c) for c in message]
-    debug_print(message, 1)
-    ser.write(message)
-    time.sleep(1)
-    pass
+  # Start the keyboard listener in a non-blocking manner
+  listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+
+  listener.start()
+
+def main():
+  setup_rpi(pwm_controls=pwm_controls)
+  setup_keyboard()
+  while True:
+    run()
+    
+
+main()
