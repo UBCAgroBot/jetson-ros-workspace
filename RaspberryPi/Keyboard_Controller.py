@@ -19,10 +19,10 @@ def run():
   try:
       if movement == V_Directions.forward:
         debug_print("Moving forward")
-        rotate_wheels(DIR_FORWARD)
+        rotate_wheels(DIR_FORWARD, pwm_controls=pwm_controls)
       elif movement == V_Directions.backward:
         debug_print("Moving backward")
-        rotate_wheels(DIR_BACKWARD)
+        rotate_wheels(DIR_BACKWARD, pwm_controls=pwm_controls)
       else:
         # stop moving
         generate_pwm(0, pwm_controls=pwm_controls)
@@ -44,7 +44,7 @@ def run():
             turn_wheels(DIR_RIGHT)
       else:
          # reset angle
-         reset_angle()
+         reset_angle(current_angle=current_angle)
 
 
   except AttributeError:
