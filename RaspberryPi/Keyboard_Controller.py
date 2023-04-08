@@ -1,9 +1,8 @@
 import RPi.GPIO as GPIO
 from time import sleep, time
 from pynput import keyboard
-from RaspberryPi.rpi_helper import setup_rpi
 from constants import *
-from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print
+from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print, setup_rpi
 
 # import cv2 as cv
 # from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
