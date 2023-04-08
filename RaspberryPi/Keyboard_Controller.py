@@ -1,9 +1,8 @@
 import RPi.GPIO as GPIO
 from time import sleep, time
 from pynput import keyboard
-from RaspberryPi.rpi_helper import setup_rpi
 from constants import *
-from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print
+from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print, setup_rpi
 
 # import cv2 as cv
 # from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
@@ -20,10 +19,10 @@ def run():
   try:
       if movement == V_Directions.forward:
         debug_print("Moving forward")
-        rotate_wheels(DIR_FORWARD)
+        rotate_wheels(DIR_FORWARD, pwm_controls=pwm_controls)
       elif movement == V_Directions.backward:
         debug_print("Moving backward")
-        rotate_wheels(DIR_BACKWARD)
+        rotate_wheels(DIR_BACKWARD, pwm_controls=pwm_controls)
       else:
         # stop moving
         generate_pwm(0, pwm_controls=pwm_controls)
@@ -45,7 +44,7 @@ def run():
             turn_wheels(DIR_RIGHT)
       else:
          # reset angle
-         reset_angle()
+         reset_angle(current_angle=current_angle)
 
 
   except AttributeError:
