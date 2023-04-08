@@ -3,7 +3,7 @@ from rclpy.node import Node
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
 from sensor_msgs.msg import Image
-from vision_msgs.msg import BoundingBox2D, BoundingBox2DArray
+from image_rec.msg import BoundingBox2D, BoundingBox2DArray
 from std_msgs.msg import Header
 import torch
 import onnxruntime as ort
@@ -54,9 +54,6 @@ def process_image(image):
     image = cv2.resize(image, (RESIZE_TO, RESIZE_TO))
     image = image.transpose(2, 0, 1).astype(np.float32)
     image = image / 255.0
-    image = torch.from_numpy(image)
-    image = image.float()
-    image = image.unsqueeze(0)
     return image
 
 def bbox_list_to_msg(bbox_list):

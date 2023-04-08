@@ -7,9 +7,8 @@ from vision_msgs.msg import BoundingBox2D, BoundingBox2DArray
 from std_msgs.msg import Header
 import numpy as np
 
-import torchvision
 import torch
-from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+import onnxruntime as ort
 
 NUM_CLASSES = 4
 RESIZE_TO = 512
@@ -20,18 +19,17 @@ class FrcnnNode(Node):
     def __init__(self):
         super().__init__('frcnn')
         self.get_logger().info("FrcnnNode node has been started")
-        self.pub = self.create_publisher(BoundingBox2DArray, 'image_rec/frcnn_prediction', 10)
-        self.sub = self.create_subscription(Image, 'image_rec/pre_processed_image', self.callback, 10)
+        self.pub = self.create_publisher(
+            BoundingBox2DArray, 'image_rec/frcnn_prediction', 10)
+        self.sub = self.create_subscription(
+            Image, 'image_rec/pre_processed_image', self.callback, 10)
         self.bridge = CvBridge()
 
-        # set the computation device
-        device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        # load the model and the trained weights
-        self.model = create_model(num_classes=NUM_CLASSES).to(device)
-        self.model.load_state_dict(torch.load(
-            'src/image_rec/models/model13.pth', map_location=device
-        ))
-        self.model.eval()
+        self.ort_sess = ort.InferenceSession('src/image_rec/models/frcnn.onnx')
+        self.input_name = self.ort_sess.get_inputs()[0].name
+        self.bbox_name = self.ort_sess.get_outputs()[0].name
+        self.label_name = self.ort_sess.get_outputs()[1].name
+        self.confidence_name = self.ort_sess.get_outputs()[2].name
 
     def callback(self, data):
         try:
@@ -40,22 +38,29 @@ class FrcnnNode(Node):
             print(e)
 
         image = process_image(image)
-        preds = self.model(image)
+        out = self.ort_sess.run(
+            [self.bbox_name, self.label_name, self.confidence_name], {self.input_name: image})
+        box_pred = out[0]
+        labels = out[1]
+        confidence = out[2]
 
         weed_preds = []
 
-        for label, box in zip(preds[0]['labels'], preds[0]['boxes']):
-            if label == 'weed':
-                weed_preds.append(box.detach().numpy().tolist())
+        for box, label in zip(box_pred, labels):
+            # weed label is 2
+            if label == 2:
+                weed_preds.append(box.tolist())
 
-        #convert weed bounding boxes to ROS message
+        self.get_logger().info(str(weed_preds))
+
+        # convert weed bounding boxes to ROS message
         weed_preds = [convert_edgebox_to_cbox(bbox) for bbox in weed_preds]
         weed_preds_msg = bbox_list_to_msg(weed_preds)
 
-        #update header information (propogate image header through)
+        # update header information (propogate image header through)
         weed_preds_msg.header = data.header
 
-        #publish
+        # publish
         self.pub.publish(weed_preds_msg)
 
 
@@ -65,10 +70,8 @@ def process_image(image):
     image = cv2.resize(image, (RESIZE_TO, RESIZE_TO))
     image = image.transpose(2, 0, 1).astype(np.float32)
     image = image / 255.0
-    image = torch.from_numpy(image)
-    image = image.float()
-    image = image.unsqueeze(0)
-    return image
+    return np.array([image])
+
 
 def convert_edgebox_to_cbox(edgebox):
     """Converts bounding box from [xmin, ymin, xmax, ymax] format 
@@ -78,6 +81,7 @@ def convert_edgebox_to_cbox(edgebox):
     width = edgebox[2]-edgebox[0]
     height = edgebox[3]-edgebox[1]
     return [cx, cy, width, height]
+
 
 def bbox_list_to_msg(bbox_list):
     """Converts list of bounding boxes to ROS message.
@@ -96,14 +100,15 @@ def bbox_list_to_msg(bbox_list):
 
 
 def create_model(num_classes):
-    
+
     # load Faster RCNN pre-trained model
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=False)
-    
-    # get the number of input features 
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
+        pretrained=False)
+
+    # get the number of input features
     in_features = model.roi_heads.box_predictor.cls_score.in_features
     # define a new head for the detector with required number of classes
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes) 
+    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 
     """
     for param in model.parameters():
@@ -120,6 +125,7 @@ def create_model(num_classes):
 
     return model
 
+
 def main(args=None):
     rclpy.init(args=args)
 
@@ -129,6 +135,7 @@ def main(args=None):
 
     frcnn_node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'preprocessor = image_rec.pre_processor:main',
+            'realsense = image_rec.realsense:main',
             'testpublisher = image_rec.test_imgsrc:main',
             'frcnn = image_rec.frcnn:main',
             'yolo = image_rec.yolo:main',

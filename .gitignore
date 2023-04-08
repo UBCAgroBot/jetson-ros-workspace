@@ -33,9 +33,9 @@ AMENT_IGNORE
 .vscode/
 
 # testing files for the image_rec package
-src/image_rec/image_rec/test_imgpost.py
+# src/image_rec/image_rec/test_imgpost.py
 src/image_rec/image_rec/test_imgsrc.py
 src/image_rec/image_rec/post_processor.py
 
 # ML models 
-src/image_rec/models/model13.pth
+src/image_rec/models
