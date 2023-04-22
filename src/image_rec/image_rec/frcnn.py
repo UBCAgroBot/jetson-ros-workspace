@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
 from sensor_msgs.msg import Image
@@ -11,13 +12,13 @@ import torch
 import onnxruntime as ort
 
 NUM_CLASSES = 4
-RESIZE_TO = 512
 
 
 class FrcnnNode(Node):
 
     def __init__(self):
         super().__init__('frcnn')
+        
         self.get_logger().info("FrcnnNode node has been started")
         self.pub = self.create_publisher(
             BoundingBox2DArray, 'image_rec/frcnn_prediction', 10)
@@ -67,7 +68,6 @@ class FrcnnNode(Node):
 def process_image(image):
     """Pre-processes image for FRCNN"""
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (RESIZE_TO, RESIZE_TO))
     image = image.transpose(2, 0, 1).astype(np.float32)
     image = image / 255.0
     return np.array([image])
@@ -99,42 +99,21 @@ def bbox_list_to_msg(bbox_list):
     return bbox_arr_msg
 
 
-def create_model(num_classes):
-
-    # load Faster RCNN pre-trained model
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
-        pretrained=False)
-
-    # get the number of input features
-    in_features = model.roi_heads.box_predictor.cls_score.in_features
-    # define a new head for the detector with required number of classes
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-
-    """
-    for param in model.parameters():
-        param.requires_grad = False
-        try:
-            num_ftrs = model.fc.in_features
-        except:
-            num_ftrs = model.classifier[0].in_features
-        # Here the size of each output sample is set to 2.
-        # Alternatively, it can be generalized to nn.Linear(num_ftrs, len(class_names)).
-        model.fc = nn.Linear(num_ftrs, NUM_CLASSES)
-        model= model.to(device)
-    """
-
-    return model
-
-
 def main(args=None):
     rclpy.init(args=args)
 
     frcnn_node = FrcnnNode()
 
-    rclpy.spin(frcnn_node)
+    executor = MultiThreadedExecutor()
+    executor.add_node(frcnn_node)
 
-    frcnn_node.destroy_node()
-    rclpy.shutdown()
+    try:
+        executor.spin()
+    finally:
+        executor.shutdown()
+        frcnn_node.destroy_node()
+        rclpy.shutdown()
+
 
 
 if __name__ == '__main__':

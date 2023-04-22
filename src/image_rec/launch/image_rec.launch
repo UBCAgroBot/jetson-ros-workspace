@@ -1,8 +1,13 @@
 <launch>
-    <node pkg="image_rec" exec="testpublisher" name="testpublisher" output="screen"/>
+    <!-- <node pkg="image_rec" exec="testpublisher" name="testpublisher" output="screen"/> -->
+    <!-- <node pkg="realsense2_camera" executable="rs_launch.py" name="realsense_camera_node" output="screen">
+        <param name="device_type" value="d455"/>
+        <param name="initial_reset" value="true"/>
+    </node> -->
+    <!-- <node pkg="image_rec" exec="realsense" name="realsense" output="screen"/> -->
     <node pkg="image_rec" exec="preprocessor" name="pre_processor"/>
     <node pkg="image_rec" exec="frcnn" name="frcnn" output="screen"/>
-    <node pkg="image_rec" exec="test_imgpost" name="test_imgpost" output="screen"/>
-    <!-- <node pkg="image_rec" exec="realsense" name="realsense" output="screen"/> -->
+    <!-- node pkg="image_rec" exec="test_imgpost" name="test_imgpost" output="screen"/> -->
+    <!-- node pkg="image_rec" exec="ImageOverlay" name="ImageOverlay"/> -->
 
 </launch>

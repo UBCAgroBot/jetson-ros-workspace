@@ -18,7 +18,7 @@ class PreProcessor(Node):
         self.get_logger().info("PreProcessor node has been started")
         self.pub = self.create_publisher(Image, 'image_rec/pre_processed_image', 10)
         #Change to camera raw image topic
-        self.sub = self.create_subscription(Image, 'test_img', self.callback, 10)
+        self.sub = self.create_subscription(Image, '/camera/color/image_raw', self.callback, 10)
         self.bridge = CvBridge()
         self.counter = 0
 
@@ -28,6 +28,9 @@ class PreProcessor(Node):
                 image = self.bridge.imgmsg_to_cv2(data, "bgr8")
             except CvBridgeError as e:
                 print(e)
+
+            cv2.imshow("feed", image)
+            cv2.waitKey(1)
 
             resized_img = cv2.resize(image, (RESIZE_WIDTH, RESIZE_HEIGHT))
             resized_img_msg = self.bridge.cv2_to_imgmsg(resized_img, "bgr8")
