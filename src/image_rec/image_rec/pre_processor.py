@@ -31,10 +31,10 @@ class PreProcessor(Node):
 
             cv2.imshow("feed", image)
             cv2.waitKey(1)
-
+            
             resized_img = cv2.resize(image, (RESIZE_WIDTH, RESIZE_HEIGHT))
             resized_img_msg = self.bridge.cv2_to_imgmsg(resized_img, "bgr8")
-
+``
             #pass header information through
             resized_img_msg.header = data.header
 
