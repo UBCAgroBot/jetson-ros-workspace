@@ -19,7 +19,7 @@ class ImageOverlay(Node):
             10)
         self.subscription_image = self.create_subscription(
             Image,
-            'camera/color/image_raw',
+            'image_rec/pre_processed_image',
             self.image_callback,
             10)
         self.cv_bridge = CvBridge()
