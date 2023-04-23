@@ -9,7 +9,9 @@ class VisualizationNode(Node):
 
     def __init__(self):
         super().__init__('visualization_node')
+        self.get_logger().info('visualization_node has been started')
         self.bridge = CvBridge()
+        self.pub = self.create_publisher(Image, 'image_rec/visualization_node', 10)
         self.sub = self.create_subscription(
             Image, 'image_rec/pre_processed_image', self.image_callback, 10)
         self.pred_sub = self.create_subscription(
