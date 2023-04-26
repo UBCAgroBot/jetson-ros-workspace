@@ -3,7 +3,8 @@ from rclpy.node import Node
 from cv_bridge import CvBridge
 import cv2
 from sensor_msgs.msg import Image
-from vision_msgs.msg import BoundingBox2DArray, BoundingBox2D
+from agrobot_msgs.msg import BoundingBox2DArray
+from vision_msgs.msg import BoundingBox2D
 import numpy as np
 
 
