@@ -3,9 +3,7 @@ from rclpy.node import Node
 from cv_bridge import CvBridge
 import cv2
 from sensor_msgs.msg import Image
-from vision_msgs.msg import BoundingBox2D
-from std_msgs.msg import Header
-from agrobot_msgs.msg import BoundingBox2DArray
+from vision_msgs.msg import BoundingBox2DArray, BoundingBox2D
 import numpy as np
 
 
@@ -22,10 +20,23 @@ class OverlayNode(Node):
             Image, '/camera/color/image_raw', self.image_callback, 10)
         self.overlay_color = (255, 0, 0) # red
 
+        # Create a publisher for the bounding box coordinates
+        self.pub = self.create_publisher(BoundingBox2D, 'image_rec/bounding_box_preview', 10)
+
     def callback(self, bbox_array):
         bbox_list = []
         for bbox in bbox_array.boxes:
-            bbox_list.append([bbox.center.x, bbox.center.y, bbox.size_x, bbox.size_y])
+            xmin = int((bbox.center.x - bbox.size_x / 2) * 512)
+            ymin = int((bbox.center.y - bbox.size_y / 2) * 512)
+            xmax = int((bbox.center.x + bbox.size_x / 2) * 512)
+            ymax = int((bbox.center.y + bbox.size_y / 2) * 512)
+            bbox_msg = BoundingBox2D()
+            bbox_msg.xmin = xmin
+            bbox_msg.ymin = ymin
+            bbox_msg.xmax = xmax
+            bbox_msg.ymax = ymax
+            self.pub.publish(bbox_msg)
+
         self.bbox_list = bbox_list
 
     def image_callback(self, data):
