@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from vision_msgs.msg import BoundingBox2DArray
+from agrobot_msgs.msg import BoundingBox2DArray
 from cv_bridge import CvBridge
 import cv2
 

@@ -26,6 +26,8 @@ setup(
             'frcnn = image_rec.frcnn:main',
             'yolo = image_rec.yolo:main',
             'test_imgpost = image_rec.test_imgpost:main',
+            'visualization = image_rec.visualization_node:main',
+            'overlay_node = image_rec.overlay_node:main',
         ],
     },
 )

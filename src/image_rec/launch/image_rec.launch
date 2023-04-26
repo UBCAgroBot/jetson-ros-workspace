@@ -8,6 +8,6 @@
     <node pkg="image_rec" exec="preprocessor" name="pre_processor"/>
     <node pkg="image_rec" exec="frcnn" name="frcnn" output="screen"/>
     <!-- node pkg="image_rec" exec="test_imgpost" name="test_imgpost" output="screen"/> -->
-    <!-- node pkg="image_rec" exec="ImageOverlay" name="ImageOverlay"/> -->
-
+    <node pkg="image_rec" exec="visualization" name="visualization_node"/>
+    <node pkg="image_rec" exec="overlay_node" name="overlay_node"/>
 </launch>
