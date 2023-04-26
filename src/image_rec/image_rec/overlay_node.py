@@ -7,9 +7,6 @@ from sensor_msgs.msg import Image
 from vision_msgs.msg import BoundingBox2D
 from agrobot_msgs.msg import BoundingBox2DArray
 from std_msgs.msg import Header
-=======
-from vision_msgs.msg import BoundingBox2DArray
->>>>>>> 09e8c9a813dc3571ee8d8b97bb066e09ba74e869
 import numpy as np
 
 
