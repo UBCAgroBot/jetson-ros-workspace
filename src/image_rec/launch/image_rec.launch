@@ -10,4 +10,5 @@
     <!-- node pkg="image_rec" exec="test_imgpost" name="test_imgpost" output="screen"/> -->
     <!-- node pkg="image_rec" exec="visualization" name="visualization_node"/> -->
     <node pkg="image_rec" exec="overlay_node" name="overlay_node"/>
+    <node pkg="image_rec" exec="weed_id_assigner" name="weed_id_assigner" output="screen"/>
 </launch>

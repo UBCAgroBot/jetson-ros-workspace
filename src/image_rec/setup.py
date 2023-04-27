@@ -28,6 +28,7 @@ setup(
             'test_imgpost = image_rec.test_imgpost:main',
             'visualization = image_rec.visualization_node:main',
             'overlay_node = image_rec.overlay_node:main',
+            'weed_id_assigner = image_rec.weed_id_assigner:main',
         ],
     },
 )

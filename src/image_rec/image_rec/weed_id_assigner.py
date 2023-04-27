@@ -27,16 +27,16 @@ class WeedIDAssigner(Node):
         header.stamp = self.get_clock().now().to_msg()
         weed_bounding_boxes = []
         for box in msg.boxes:
-            center_x = (box.center_x)
-            center_y = (box.center_y)
+            center_x = box.center.x
+            center_y = box.center.y
             area = (box.size_x) * (box.size_y)
             obj_id = self.get_id_for_box((center_x, center_y), area)
             weed_bounding_box = WeedBoundingBox()
             weed_bounding_box.header = header
-            weed_bounding_box.center_x = center_x
-            weed_bounding_box.center_y = center_y
-            weed_bounding_box.size_x = box.max_x - box.min_x
-            weed_bounding_box.size_y = box.max_y - box.min_y
+            weed_bounding_box.center.x = center_x
+            weed_bounding_box.center.y = center_y
+            weed_bounding_box.size_x = box.size_x
+            weed_bounding_box.size_y = box.size_y
             weed_bounding_box.obj_id = obj_id
             weed_bounding_boxes.append(weed_bounding_box)
         self.publisher_.publish(weed_bounding_boxes)
