@@ -4,7 +4,7 @@ from cv_bridge import CvBridge
 import cv2
 from sensor_msgs.msg import Image
 from vision_msgs.msg import BoundingBox2D
-from agrobot_msgs.msg import BoundingBox2DArray
+from agrobot_msgs.msg import BoundingBox2DArray, BoundingBoxMinMax
 import numpy as np
 
 
@@ -22,20 +22,21 @@ class OverlayNode(Node):
         self.overlay_color = (255, 0, 0) # red
 
         # Create a publisher for the bounding box coordinates
-        self.pub = self.create_publisher(BoundingBox2D, 'image_rec/bounding_box', 10)
+        self.pub = self.create_publisher(BoundingBoxMinMax, 'image_rec/bounding_box', 10)
 
     def callback(self, bbox_array):
         bbox_list = []
         for bbox in bbox_array.boxes:
-            xmin = int((bbox.center.x - bbox.size_x / 2))
-            ymin = int((bbox.center.y - bbox.size_y / 2))
-            xmax = int((bbox.center.x + bbox.size_x / 2))
-            ymax = int((bbox.center.y + bbox.size_y / 2))
-            bbox_msg = BoundingBox2D()
-            bbox_msg.xmin = xmin
-            bbox_msg.ymin = ymin
-            bbox_msg.xmax = xmax
-            bbox_msg.ymax = ymax
+            xmin = (bbox.center.x - bbox.size_x / 2)
+            ymin = (bbox.center.y - bbox.size_y / 2)
+            xmax = (bbox.center.x + bbox.size_x / 2)
+            ymax = (bbox.center.y + bbox.size_y / 2)
+            bbox_list.append([xmin,ymin,xmax,ymax])
+            bbox_msg = BoundingBoxMinMax()
+            bbox_msg.x_min = xmin
+            bbox_msg.y_min = ymin
+            bbox_msg.x_max = xmax
+            bbox_msg.y_max = ymax
             self.pub.publish(bbox_msg)
 
         self.bbox_list = bbox_list
@@ -52,11 +53,11 @@ class OverlayNode(Node):
         if hasattr(self, 'bbox_list'):
             # Overlay bounding boxes on the frame
             for bbox in self.bbox_list:
-                x, y, w, h = bbox
-                xmin = int((x - w / 2))
-                ymin = int((y - h / 2))
-                xmax = int((x + w / 2))
-                ymax = int((y + h / 2))
+                xmin, ymin, xmax, ymax = bbox
+                xmin = int(xmin)
+                ymin = int(ymin)
+                xmax = int(xmax)
+                ymax = int(ymax)
                 cv2.rectangle(resized_frame, (xmin, ymin), (xmax, ymax), self.overlay_color, 2)
                 cv2.putText(resized_frame, "weed", (xmin, ymin-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.overlay_color, 2)
 
@@ -75,6 +76,7 @@ def main(args=None):
     overlay_node.destroy_node()
     rclpy.shutdown()
 
+    cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()
