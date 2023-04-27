@@ -45,7 +45,7 @@ class WeedIDAssigner(Node):
         for obj_id, (prev_center, prev_area, timestamp) in self.bounding_boxes.items():
             distance = math.sqrt((center[0] - prev_center[0])**2 + (center[1] - prev_center[1])**2)
             area_ratio = area / prev_area
-            if distance < self.get_parameter('distance_threshold').value and area_ratio > self.get_parameter('area_ratio_threshold_lower').value and area_ratio < self.get_parameter('area_ratio_higher'):
+            if distance < self.get_parameter('distance_threshold').value and area_ratio > self.get_parameter('area_ratio_threshold_lower').value and area_ratio < self.get_parameter('area_ratio_threshold_upper'):
                 self.bounding_boxes[obj_id] = (center, area, self.get_clock().now())
                 return obj_id
         new_id = max(self.bounding_boxes.keys(), default=-1) + 1
