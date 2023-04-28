@@ -1,4 +1,4 @@
-from RaspberryPi.constants import H_Directions, V_Directions
+from constants import H_Directions, V_Directions
 from evdev import list_devices, InputDevice, categorize, ecodes
 
 # https://stackoverflow.com/questions/44934309/how-to-access-the-joysticks-of-a-gamepad-using-python-evdev

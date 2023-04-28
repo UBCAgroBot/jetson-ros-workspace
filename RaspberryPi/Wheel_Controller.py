@@ -3,6 +3,7 @@ from RaspberryPi.rpi_helper import generate_pwm
 from constants import *
 from rpi_helper import reset_angle, setup_rpi, debug_print
 import signal
+import sys
 
 import cv2 as cv
 from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
@@ -43,6 +44,7 @@ def handler(signum, frame):
     reset_angle(current_angle=current_angle)
     # stop moving
     generate_pwm(0, pwm_controls=pwm_controls)
+    sys.exit(0)
 
 
 signal.signal(signal.SIGINT, handler)
