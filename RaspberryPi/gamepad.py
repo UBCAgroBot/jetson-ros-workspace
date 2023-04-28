@@ -21,17 +21,17 @@ axis = {
 }
 
 center = {
-    'ls_x': STICK_MAX/2,
-    'ls_y': STICK_MAX/2,
-    'rs_x': STICK_MAX/2,
-    'rs_y': STICK_MAX/2
+    'ls_x': STICK_MAX / 2,
+    'ls_y': STICK_MAX / 2,
+    'rs_x': STICK_MAX / 2,
+    'rs_y': STICK_MAX / 2
 }
 
 last = {
-    'ls_x': STICK_MAX/2,
-    'ls_y': STICK_MAX/2,
-    'rs_x': STICK_MAX/2,
-    'rs_y': STICK_MAX/2,
+    'ls_x': STICK_MAX / 2,
+    'ls_y': STICK_MAX / 2,
+    'rs_x': STICK_MAX / 2,
+    'rs_y': STICK_MAX / 2,
     'rt': 0,
     'lt': 0
 }
