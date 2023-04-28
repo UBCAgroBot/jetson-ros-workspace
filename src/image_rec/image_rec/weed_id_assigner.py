@@ -9,6 +9,7 @@ class WeedIDAssigner(Node):
 
     def __init__(self):
         super().__init__('weed_id_assigner')
+        self.get_logger().info("Weed ID Assigner has started")
         self.declare_parameter('distance_threshold', 10.0)
         self.declare_parameter('area_ratio_threshold_lower', 0.95)
         self.declare_parameter('area_ratio_threshold_upper', 1.05)
