@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep, time
 from pynput import keyboard
+from gamepad import run_gamepad
 from constants import *
 from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print, setup_rpi
 import signal
@@ -13,9 +14,8 @@ movement_arr = [V_Directions.halted, H_Directions.straight]
 pwm_controls = []
 
 
-def run():
-    global current_angle, movement_arr
-    movement, turning = movement_arr
+def process_movement_turning(movement, turning):
+    global current_angle
     debug_print(movement, turning, "angle ", current_angle)
     try:
         if movement == V_Directions.forward:
@@ -50,39 +50,6 @@ def run():
         print("Attribute Error")
 
 
-# testing with keyboard
-def setup_keyboard():
-    def on_press(key):
-        try:
-            if key.char == "w":
-                movement_arr[0] = V_Directions.forward
-            elif key.char == "s":
-                movement_arr[0] = V_Directions.backward
-            elif key.char == "a":
-                movement_arr[1] = H_Directions.left
-            elif key.char == "d":
-                movement_arr[1] = H_Directions.right
-        except AttributeError:
-            print(f'special key {key} pressed')
-
-    def on_release(key):
-        try:
-            if key.char == "w" or key.char == "s":
-                movement_arr[0] = V_Directions.halted
-            elif key.char == "a" or key.char == "d":
-                movement_arr[1] = H_Directions.straight
-            debug_print(f'{key} released')
-        except AttributeError:
-            if key == keyboard.Key.esc:
-                # Stop listener
-                return False
-
-    # Start the keyboard listener in a non-blocking manner
-    listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-
-    listener.start()
-
-
 def handler(signum, frame):
     # reset angle
     reset_angle(current_angle=current_angle)
@@ -96,9 +63,7 @@ signal.signal(signal.SIGINT, handler)
 
 def main():
     setup_rpi(pwm_controls=pwm_controls)
-    setup_keyboard()
-    while True:
-        run()
+    run_gamepad(process_movement_turning)
 
 
 main()
