@@ -1,4 +1,4 @@
-from RaspberryPi.constants import H_Directions, V_Directions
+from constants import H_Directions, V_Directions
 from evdev import list_devices, InputDevice, categorize, ecodes
 
 # https://stackoverflow.com/questions/44934309/how-to-access-the-joysticks-of-a-gamepad-using-python-evdev
@@ -21,17 +21,17 @@ axis = {
 }
 
 center = {
-    'ls_x': STICK_MAX/2,
-    'ls_y': STICK_MAX/2,
-    'rs_x': STICK_MAX/2,
-    'rs_y': STICK_MAX/2
+    'ls_x': STICK_MAX / 2,
+    'ls_y': STICK_MAX / 2,
+    'rs_x': STICK_MAX / 2,
+    'rs_y': STICK_MAX / 2
 }
 
 last = {
-    'ls_x': STICK_MAX/2,
-    'ls_y': STICK_MAX/2,
-    'rs_x': STICK_MAX/2,
-    'rs_y': STICK_MAX/2,
+    'ls_x': STICK_MAX / 2,
+    'ls_y': STICK_MAX / 2,
+    'rs_x': STICK_MAX / 2,
+    'rs_y': STICK_MAX / 2,
     'rt': 0,
     'lt': 0
 }
