@@ -3,9 +3,8 @@ from time import sleep, time
 from pynput import keyboard
 from constants import *
 from rpi_helper import turn_wheels, rotate_wheels, generate_pwm, reset_angle, debug_print, setup_rpi
+import signal
 
-# import cv2 as cv
-# from ..Navigation.algorithms import SeesawAlgorithm as Seesaw
 
 # global variables
 current_angle = 0.0
@@ -83,6 +82,13 @@ def setup_keyboard():
   listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
   listener.start()
+
+def handler(signum, frame):
+    # reset angle
+    reset_angle(current_angle=current_angle)
+    # stop moving
+    generate_pwm(0, pwm_controls=pwm_controls)
+signal.signal(signal.SIGINT, handler)
 
 def main():
   setup_rpi(pwm_controls=pwm_controls)
