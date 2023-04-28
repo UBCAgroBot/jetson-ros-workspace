@@ -57,7 +57,7 @@ def listen_gamepad():
                     move = 'F'
 
             elif axis[event.code] == 'ls_x':
-                print(value)
+                # print(value)
                 if value < 0:
                     turn = 'L'
                 elif value == 0:
@@ -65,3 +65,5 @@ def listen_gamepad():
                 else:
                     turn = 'R'
         print(move + ", " + turn)
+
+listen_gamepad()
