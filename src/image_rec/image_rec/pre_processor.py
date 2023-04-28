@@ -8,7 +8,7 @@ from sensor_msgs.msg import Image
 RESIZE_WIDTH = 512
 RESIZE_HEIGHT = 512
 
-SKIP_FRAMES = 10 #Only publish every SKIP_FRAMES frames
+SKIP_FRAMES = 5 #Only publish every SKIP_FRAMES frames
 
 
 class PreProcessor(Node):
