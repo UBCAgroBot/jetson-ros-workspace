@@ -28,6 +28,7 @@ set(msg_files
   msg/VisionInfo.msg
   msg/WeedBoundingBox.msg
   msg/BoundingBoxMinMax.msg
+  msg/FrcnnBoundingBox.msg
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
