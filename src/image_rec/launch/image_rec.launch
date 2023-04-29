@@ -11,4 +11,6 @@
     <!-- node pkg="image_rec" exec="visualization" name="visualization_node"/> -->
     <node pkg="image_rec" exec="overlay_node" name="overlay_node"/>
     <node pkg="image_rec" exec="weed_id_assigner" name="weed_id_assigner" output="screen"/>
+    <node pkg="image_rec" exec="fieldtest" name="FieldTest" output="screen"/>
+    <node pkg="image_rec" exec="dummy_generator" name="dummy_generator" output="screen"/>
 </launch>

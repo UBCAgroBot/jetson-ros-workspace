@@ -1,12 +1,9 @@
-# A 2D bounding box ros message
+# Frcnn Bounding Box ros message
 
 std_msgs/Header header
 
 # Bounding box coordindates
-float64 center_x
-float64 center_y
-float64 size_x 
-float64 size_y
+vision_msgs/BoundingBox2D[] boxes
 float64 confidence_val
 int32 plant_id
 

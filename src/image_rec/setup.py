@@ -29,6 +29,8 @@ setup(
             'visualization = image_rec.visualization_node:main',
             'overlay_node = image_rec.overlay_node:main',
             'weed_id_assigner = image_rec.weed_id_assigner:main',
+            'fieldtest = image_rec.FieldTest:main',
+            'dummy_generator = image_rec.dummy_generator:main',
         ],
     },
 )
